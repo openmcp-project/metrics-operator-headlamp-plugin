@@ -3,7 +3,6 @@ import {
   registerSidebarEntry,
 } from '@kinvolk/headlamp-plugin/lib';
 import React from 'react';
-import HealthView from './health/HealthView';
 import MetricsTabs from './metrics/MetricsTabs';
 import DataSinkList from './datasinks/DataSinkList';
 import CRDView from './crds/CRDView';
@@ -26,15 +25,8 @@ registerSidebarEntry({
   parent: null,
   name: 'metrics-operator',
   label: 'Metrics Operator',
-  url: '/metrics-operator/health',
+  url: '/metrics-operator/metrics',
   icon: metricsIcon,
-});
-
-registerSidebarEntry({
-  parent: 'metrics-operator',
-  name: 'metrics-operator-health',
-  label: 'Health',
-  url: '/metrics-operator/health',
 });
 
 registerSidebarEntry({
@@ -66,14 +58,6 @@ registerSidebarEntry({
 });
 
 // ── Routes ───────────────────────────────────────────────────────────────────
-
-registerRoute({
-  path: '/metrics-operator/health',
-  sidebar: 'metrics-operator-health',
-  name: 'metricsOperatorHealth',
-  exact: true,
-  component: () => React.createElement(HealthView),
-});
 
 registerRoute({
   path: '/metrics-operator/metrics',
