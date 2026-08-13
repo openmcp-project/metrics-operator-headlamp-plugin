@@ -24,7 +24,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@babel/runtime": "8.0.0",
-    "@kinvolk/headlamp-plugin": "0.13.1",
+    "@kinvolk/headlamp-plugin": "0.14.0",
     "@testing-library/react": "15.0.7",
     "@testing-library/user-event": "14.6.4",
     "@types/lodash": "4.17.25",
