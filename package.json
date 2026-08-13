@@ -1,0 +1,56 @@
+{
+  "name": "headlamp-metrics-operator",
+  "version": "0.1.0",
+  "description": "Metrics Operator plugin for Headlamp",
+  "main": "main.js",
+  "scripts": {
+    "build": "npx @kinvolk/headlamp-plugin build",
+    "start": "npx @kinvolk/headlamp-plugin start",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts",
+    "tsc": "headlamp-plugin tsc",
+    "mock": "node mock-cluster/server.mjs",
+    "mock:medium": "node mock-cluster/server.mjs --scenario medium",
+    "mock:large": "node mock-cluster/server.mjs --scenario large"
+  },
+  "keywords": [
+    "metrics-operator",
+    "Headlamp",
+    "Kubernetes",
+    "OpenTelemetry"
+  ],
+  "author": "openmcp-project",
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "devDependencies": {
+    "@babel/runtime": "^8.0.0",
+    "@kinvolk/headlamp-plugin": "0.13.1",
+    "@testing-library/react": "^15.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/lodash": "^4.17.25",
+    "@types/react": "18.3.28",
+    "@vitejs/plugin-react": "^4.3.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "ajv": "^8.20.0",
+    "aria-query": "^5.3.2",
+    "fs-extra": "^11.4.0",
+    "jsdom": "^30.0.1",
+    "msw": "^2.4.9",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "monaco-yaml": "^5.5.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@headlamp-k8s",
+      "prettier",
+      "plugin:jsx-a11y/recommended"
+    ]
+  },
+  "prettier": "@headlamp-k8s/eslint-config/prettier-config",
+  "overrides": {
+    "typescript": "5.6.2"
+  }
+}

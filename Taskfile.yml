@@ -1,0 +1,33 @@
+version: "3"
+
+vars:
+  CONTEXT: kind-headlamp-dev
+  NAMESPACE: headlamp
+  PLUGIN_DIR: headlamp-metrics-operator
+
+tasks:
+  dev:
+    desc: "Build this plugin + bootstrap local Headlamp kind cluster (delegates to ui-frontend). Usage: task dev"
+    cmds:
+      - task -d ../ui-frontend headlamp:setup
+
+  update:
+    desc: "Build this plugin and hot-sync it into the running headlamp-dev pod. Usage: task update"
+    cmds:
+      - npm run build
+      - |
+        POD=$(kubectl --context {{.CONTEXT}} get pod -n {{.NAMESPACE}} -l app.kubernetes.io/name=headlamp -o jsonpath='{.items[0].metadata.name}')
+        if [[ -z "$POD" ]]; then
+          echo "error: no headlamp pod found — run: task dev" >&2
+          exit 1
+        fi
+        echo "→ syncing to pod ${POD}:/headlamp/plugins/{{.PLUGIN_DIR}}/ ..."
+        kubectl --context {{.CONTEXT}} exec -n {{.NAMESPACE}} "${POD}" -- mkdir -p "/headlamp/plugins/{{.PLUGIN_DIR}}"
+        kubectl --context {{.CONTEXT}} cp dist/main.js "{{.NAMESPACE}}/${POD}:/headlamp/plugins/{{.PLUGIN_DIR}}/main.js"
+        kubectl --context {{.CONTEXT}} cp package.json "{{.NAMESPACE}}/${POD}:/headlamp/plugins/{{.PLUGIN_DIR}}/package.json"
+        echo "✓ metrics-operator plugin synced — hard-refresh the browser to pick up changes"
+
+  dev:desktop:
+    desc: "Watch build with auto-copy to Headlamp desktop plugins folder. Usage: task dev:desktop"
+    cmds:
+      - npm run start
