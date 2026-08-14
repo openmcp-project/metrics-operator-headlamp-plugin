@@ -28,7 +28,7 @@
     "@testing-library/react": "15.0.7",
     "@testing-library/user-event": "14.6.4",
     "@types/lodash": "4.17.25",
-    "@types/react": "18.3.28",
+    "@types/react": "18.3.31",
     "@vitejs/plugin-react": "4.7.0",
     "@vitest/coverage-v8": "1.6.1",
     "ajv": "8.20.0",
