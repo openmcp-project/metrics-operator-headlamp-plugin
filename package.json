@@ -25,7 +25,7 @@
   "devDependencies": {
     "@babel/runtime": "8.0.0",
     "@kinvolk/headlamp-plugin": "0.14.0",
-    "@testing-library/react": "15.0.7",
+    "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.4",
     "@types/lodash": "4.17.25",
     "@types/react": "18.3.31",
