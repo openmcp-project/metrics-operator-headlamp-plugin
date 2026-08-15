@@ -39,7 +39,7 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^5.0.0",
     "monaco-yaml": "^5.5.1"
   },
   "eslintConfig": {
