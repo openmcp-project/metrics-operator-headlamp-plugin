@@ -26,7 +26,7 @@
     "@babel/runtime": "8.0.0",
     "@kinvolk/headlamp-plugin": "0.14.0",
     "@testing-library/react": "16.3.2",
-    "@testing-library/user-event": "14.6.4",
+    "@testing-library/user-event": "14.6.5",
     "@types/lodash": "4.17.25",
     "@types/react": "18.3.31",
     "@vitejs/plugin-react": "4.7.0",
