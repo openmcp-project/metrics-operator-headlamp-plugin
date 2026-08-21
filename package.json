@@ -36,7 +36,7 @@
     "fs-extra": "11.4.0",
     "jsdom": "30.0.1",
     "msw": "2.15.0",
-    "vitest": "^1.6.0"
+    "vitest": "^3.2.6"
   },
   "dependencies": {
     "js-yaml": "^5.0.0",
