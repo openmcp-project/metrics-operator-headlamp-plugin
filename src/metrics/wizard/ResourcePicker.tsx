@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchApiGroups } from './schemaHelpers';
 import { FederatedClusterAccess } from '../../common/Resources';
+import styles from './ResourcePicker.module.css';
 
 const { Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress, Chip, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
@@ -19,9 +20,6 @@ interface Props {
   federatedAccessRef?: string;
   onFederatedAccessChange?: (name: string) => void;
 }
-
-const TH: React.CSSProperties = { padding: '7px 12px', fontWeight: 600, fontSize: 11, whiteSpace: 'nowrap' };
-const TD: React.CSSProperties = { padding: '7px 12px', fontSize: 12, verticalAlign: 'middle' };
 
 export function ResourcePicker({ value, onChange, requireFederatedAccess, federatedAccessRef, onFederatedAccessChange }: Props) {
   const theme = useTheme();
@@ -51,15 +49,15 @@ export function ResourcePicker({ value, onChange, requireFederatedAccess, federa
 
   return (
     <Box>
-      <Typography variant="h6" style={{ marginBottom: 6 }}>Select target resource type</Typography>
-      <Typography variant="body2" color="textSecondary" style={{ marginBottom: 18 }}>
+      <Typography variant="h6" className={styles.title}>Select target resource type</Typography>
+      <Typography variant="body2" color="textSecondary" className={styles.subtitle}>
         Choose the Kubernetes resource kind you want to count or measure.
       </Typography>
 
       {requireFederatedAccess && (
-        <Box style={{ marginBottom: 20 }}>
-          <Typography variant="subtitle2" style={{ marginBottom: 8 }}>Federated Cluster Access *</Typography>
-          <FormControl size="small" style={{ minWidth: 280 }}>
+        <Box className={styles.fedAccessSection}>
+          <Typography variant="subtitle2" className={styles.fedAccessLabel}>Federated Cluster Access *</Typography>
+          <FormControl size="small" className={styles.fedAccessControl}>
             <InputLabel>FederatedClusterAccess</InputLabel>
             <Select
               value={federatedAccessRef ?? ''}
@@ -73,15 +71,15 @@ export function ResourcePicker({ value, onChange, requireFederatedAccess, federa
         </Box>
       )}
 
-      <Box display="flex" style={{ gap: 10, marginBottom: 14 }}>
+      <Box display="flex" className={styles.filterBar}>
         <TextField
           size="small"
           placeholder="Search kind…"
           value={search}
           onChange={(e: any) => setSearch(e.target.value)}
-          style={{ minWidth: 220 }}
+          className={styles.search}
         />
-        <FormControl size="small" style={{ minWidth: 200 }}>
+        <FormControl size="small" className={styles.groupFilter}>
           <InputLabel>API Group</InputLabel>
           <Select value={groupFilter} label="API Group" onChange={(e: any) => setGroupFilter(e.target.value)}>
             <MenuItem value="all">All groups</MenuItem>
@@ -91,19 +89,19 @@ export function ResourcePicker({ value, onChange, requireFederatedAccess, federa
       </Box>
 
       {loading ? (
-        <Box display="flex" alignItems="center" style={{ gap: 10, padding: 24 }}>
+        <Box display="flex" alignItems="center" className={styles.loadingBox}>
           <CircularProgress size={20} />
           <Typography variant="body2" color="textSecondary">Loading API resources…</Typography>
         </Box>
       ) : (
-        <Box style={{ maxHeight: 380, overflowY: 'auto', border: `1px solid ${theme.palette.divider}`, borderRadius: 6 }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead style={{ position: 'sticky', top: 0, background: theme.palette.background.default, zIndex: 1 }}>
+        <Box className={styles.tableWrap} style={{ border: `1px solid ${theme.palette.divider}` }}>
+          <table className={styles.table}>
+            <thead className={styles.thead} style={{ background: theme.palette.background.default }}>
               <tr style={{ borderBottom: `2px solid ${theme.palette.divider}` }}>
-                <th style={TH}>Kind</th>
-                <th style={TH}>Group</th>
-                <th style={TH}>Version</th>
-                <th style={TH}>Scope</th>
+                <th className={styles.th}>Kind</th>
+                <th className={styles.th}>Group</th>
+                <th className={styles.th}>Version</th>
+                <th className={styles.th}>Scope</th>
               </tr>
             </thead>
             <tbody>
@@ -113,23 +111,23 @@ export function ResourcePicker({ value, onChange, requireFederatedAccess, federa
                   <tr
                     key={i}
                     onClick={() => onChange(r)}
+                    className={styles.row}
                     style={{
                       borderBottom: `1px solid ${theme.palette.divider}`,
-                      cursor: 'pointer',
                       background: selected ? 'rgba(21,101,192,0.08)' : undefined,
                     }}>
-                    <td style={{ ...TD, fontWeight: selected ? 700 : 600, color: selected ? '#1565c0' : undefined }}>{r.kind}</td>
-                    <td style={{ ...TD, fontFamily: 'monospace', fontSize: 11, color: theme.palette.text.secondary }}>{r.group || '(core)'}</td>
-                    <td style={{ ...TD, fontFamily: 'monospace', fontSize: 11 }}>{r.version}</td>
-                    <td style={TD}>
+                    <td className={styles.td} style={{ fontWeight: selected ? 700 : 600, color: selected ? '#1565c0' : undefined }}>{r.kind}</td>
+                    <td className={`${styles.td} ${styles.mono}`} style={{ color: theme.palette.text.secondary }}>{r.group || '(core)'}</td>
+                    <td className={`${styles.td} ${styles.mono}`}>{r.version}</td>
+                    <td className={styles.td}>
                       <Chip label={r.namespaced ? 'Namespaced' : 'Cluster'} size="small"
-                        style={{ fontSize: 10, height: 18, background: r.namespaced ? '#e3f2fd' : '#fce4ec', color: '#1a1a1a' }} />
+                        className={styles.chip} style={{ background: r.namespaced ? '#e3f2fd' : '#fce4ec', color: '#1a1a1a' }} />
                     </td>
                   </tr>
                 );
               })}
               {filtered.length === 0 && (
-                <tr><td colSpan={4} style={{ padding: 24, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No resources found.</td></tr>
+                <tr><td colSpan={4} className={styles.emptyCell} style={{ color: theme.palette.text.secondary }}>No resources found.</td></tr>
               )}
             </tbody>
           </table>
@@ -137,7 +135,7 @@ export function ResourcePicker({ value, onChange, requireFederatedAccess, federa
       )}
 
       {value && (
-        <Box style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(46,125,50,0.06)', borderRadius: 6, fontSize: 12 }}>
+        <Box className={styles.selectedSummary} style={{ background: 'rgba(46,125,50,0.06)' }}>
           Selected: <strong>{value.kind}</strong> · {value.group || 'core'}/{value.version} ·{' '}
           {value.namespaced ? 'Namespaced' : 'Cluster-scoped'}
         </Box>

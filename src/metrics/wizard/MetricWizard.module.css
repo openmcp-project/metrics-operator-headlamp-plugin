@@ -1,0 +1,33 @@
+.root {
+  padding: 24px;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.stepper {
+  margin-bottom: 28px;
+}
+
+.stepContent {
+  min-height: 340px;
+}
+
+.nav {
+  margin-top: 24px;
+  padding-top: 16px;
+}
+
+.reviewNav {
+  margin-top: 12px;
+}
+
+.successBox {
+  padding: 32px;
+}
+
+.successAlert {
+  margin-bottom: 16px;
+}

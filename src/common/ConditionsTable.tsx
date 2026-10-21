@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './ConditionsTable.module.css';
 
 const { Box, Typography, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
@@ -16,47 +17,45 @@ export function ConditionsTable({ conditions }: ConditionsTableProps) {
   const theme = useTheme();
   if (!conditions?.length) {
     return (
-      <Typography variant="body2" color="textSecondary" style={{ padding: '8px 0', fontStyle: 'italic' }}>
+      <Typography variant="body2" color="textSecondary" className={styles.empty}>
         No conditions reported.
       </Typography>
     );
   }
 
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <table className={styles.table}>
       <thead>
-        <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left' }}>
-          <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Type</th>
-          <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Status</th>
-          <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Reason</th>
-          <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Message</th>
-          <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Last Transition</th>
+        <tr className={styles.headerRow} style={{ borderBottom: `2px solid ${theme.palette.divider}` }}>
+          <th className={styles.th}>Type</th>
+          <th className={styles.th}>Status</th>
+          <th className={styles.th}>Reason</th>
+          <th className={styles.th}>Message</th>
+          <th className={styles.th}>Last Transition</th>
         </tr>
       </thead>
       <tbody>
         {conditions.map((c: any, i: number) => (
           <tr key={i} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
-            <td style={{ padding: '8px 12px', fontFamily: 'monospace', fontSize: 12, fontWeight: 600 }}>
+            <td className={styles.tdType}>
               {c.type}
             </td>
-            <td style={{ padding: '8px 12px' }}>
+            <td className={styles.tdStatus}>
               <Chip
                 label={c.status}
                 size="small"
+                className={styles.statusChip}
                 style={{
                   background: CONDITION_COLORS[c.status] ?? '#616161',
                   color: '#fff',
-                  fontWeight: 600,
-                  fontSize: 10,
-                  height: 20,
                 }}
               />
             </td>
-            <td style={{ padding: '8px 12px', fontSize: 12, color: theme.palette.text.secondary }}>{c.reason ?? '—'}</td>
-            <td style={{ padding: '8px 12px', fontSize: 12, color: theme.palette.text.secondary, maxWidth: 320, wordBreak: 'break-word' }}>
+            <td className={styles.tdText} style={{ color: theme.palette.text.secondary }}>{c.reason ?? '—'}</td>
+            <td className={styles.tdMessage} style={{ color: theme.palette.text.secondary }}>
               {c.message ?? '—'}
             </td>
-            <td style={{ padding: '8px 12px', fontSize: 11, color: theme.palette.text.secondary, whiteSpace: 'nowrap' }}>
+            <td className={styles.tdTime} style={{ color: theme.palette.text.secondary }}>
               {c.lastTransitionTime ? new Date(c.lastTransitionTime).toLocaleString() : '—'}
             </td>
           </tr>
@@ -69,7 +68,7 @@ export function ConditionsTable({ conditions }: ConditionsTableProps) {
 // Inline count badge for use in list rows
 export function ConditionsBadge({ conditions, onClick }: { conditions: any[]; onClick?: () => void }) {
   const theme = useTheme();
-  if (!conditions?.length) return <span style={{ color: theme.palette.text.secondary, fontSize: 12 }}>—</span>;
+  if (!conditions?.length) return <span className={styles.badgeEmpty} style={{ color: theme.palette.text.secondary }}>—</span>;
 
   const failed = conditions.filter((c: any) => c.status === 'False').length;
   const color = failed > 0 ? '#c62828' : '#2e7d32';
@@ -78,15 +77,12 @@ export function ConditionsBadge({ conditions, onClick }: { conditions: any[]; on
     <Box
       display="inline-flex"
       alignItems="center"
-      style={{ gap: 4, cursor: onClick ? 'pointer' : 'default' }}
+      className={styles.badge}
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
       onClick={onClick}
     >
-      <span style={{
-        display: 'inline-block',
-        width: 8, height: 8, borderRadius: '50%',
-        background: color, flexShrink: 0,
-      }} />
-      <span style={{ fontSize: 12, color: theme.palette.text.secondary }}>
+      <span className={styles.dot} style={{ background: color }} />
+      <span className={styles.badgeLabel} style={{ color: theme.palette.text.secondary }}>
         {failed > 0 ? `${failed} failed` : `${conditions.length} OK`}
       </span>
     </Box>

@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { RemoteClusterAccess, FederatedClusterAccess } from '../common/Resources';
 import { formatAge } from '../common/helpers';
+import styles from './ClusterAccessTabs.module.css';
 
 const { Box, Typography, Tabs, Tab, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { SectionBox, NameValueTable } = (window as any).pluginLib?.CommonComponents ?? {};
-
-const TH: React.CSSProperties = { padding: '8px 12px', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap' };
-const TD: React.CSSProperties = { padding: '8px 12px', fontSize: 12, verticalAlign: 'middle' };
 
 function SecretRef({ name, key }: { name?: string; key?: string }) {
   const theme = useTheme();
   if (!name) return <span style={{ color: theme.palette.text.secondary }}>—</span>;
   return (
-    <span style={{ fontFamily: 'monospace', fontSize: 11 }}>
+    <span className={styles.secretRef}>
       {name}{key ? `[${key}]` : ''} <span style={{ color: theme.palette.text.secondary }}>🔒</span>
     </span>
   );
@@ -33,8 +31,8 @@ function RemoteClusterDetail({ item }: { item: any }) {
     ] : []),
   ];
   return (
-    <Box style={{ padding: 20 }}>
-      <Typography variant="h6" style={{ marginBottom: 16 }}>{item.metadata?.name}</Typography>
+    <Box className={styles.detailBox}>
+      <Typography variant="h6" className={styles.detailTitle}>{item.metadata?.name}</Typography>
       <NameValueTable rows={rows} />
     </Box>
   );
@@ -48,12 +46,12 @@ function FederatedClusterDetail({ item }: { item: any }) {
     { name: 'Created', value: item.metadata?.creationTimestamp ? new Date(item.metadata.creationTimestamp).toLocaleString() : '—' },
     { name: 'Target GVK', value: spec.target ? `${spec.target.group}/${spec.target.version}/${spec.target.kind}` : '—' },
     { name: 'Target Namespace', value: spec.namespace ?? '—' },
-    ...(spec.kubeConfigPath ? [{ name: 'KubeConfig Path', value: React.createElement('span', { style: { fontFamily: 'monospace' } }, spec.kubeConfigPath) }] : []),
-    ...(spec.secretRefPath ? [{ name: 'Secret Ref Path', value: React.createElement('span', { style: { fontFamily: 'monospace' } }, spec.secretRefPath) }] : []),
+    ...(spec.kubeConfigPath ? [{ name: 'KubeConfig Path', value: React.createElement('span', { className: styles.monoPlain }, spec.kubeConfigPath) }] : []),
+    ...(spec.secretRefPath ? [{ name: 'Secret Ref Path', value: React.createElement('span', { className: styles.monoPlain }, spec.secretRefPath) }] : []),
   ];
   return (
-    <Box style={{ padding: 20 }}>
-      <Typography variant="h6" style={{ marginBottom: 16 }}>{item.metadata?.name}</Typography>
+    <Box className={styles.detailBox}>
+      <Typography variant="h6" className={styles.detailTitle}>{item.metadata?.name}</Typography>
       <NameValueTable rows={rows} />
     </Box>
   );
@@ -80,18 +78,18 @@ function RemoteClusterList() {
 
   return (
     <Box>
-      <Box style={{ padding: '8px 12px', background: 'rgba(21,101,192,0.06)', borderRadius: 6, marginBottom: 14, fontSize: 12, color: '#555' }}>
+      <Box className={styles.infoBanner} style={{ background: 'rgba(21,101,192,0.06)', color: theme.palette.text.secondary }}>
         RemoteClusterAccess grants the operator access to a single remote cluster for collecting metrics.
         Secret values are never shown — only secret names and keys.
       </Box>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <table className={styles.table}>
         <thead>
-          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
-            <th style={TH}>Name</th>
-            <th style={TH}>Namespace</th>
-            <th style={TH}>Config Type</th>
-            <th style={TH}>Secret</th>
-            <th style={TH}>Age</th>
+          <tr className={styles.headerRow} style={{ borderBottom: `2px solid ${theme.palette.divider}`, background: theme.palette.background.default }}>
+            <th className={styles.th}>Name</th>
+            <th className={styles.th}>Namespace</th>
+            <th className={styles.th}>Config Type</th>
+            <th className={styles.th}>Secret</th>
+            <th className={styles.th}>Age</th>
           </tr>
         </thead>
         <tbody>
@@ -102,21 +100,22 @@ function RemoteClusterList() {
             const secretKey = spec.kubeConfigSecretRef?.key ?? spec.remoteClusterConfig?.bearerTokenSecretKeyRef?.key;
             return (
               <tr key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-                style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
+                className={styles.row}
+                style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
                 onClick={() => launchDetail(item, 'RemoteClusterAccess')}>
-                <td style={{ ...TD, fontWeight: 600, color: '#1565c0' }}>{item.metadata?.name}</td>
-                <td style={{ ...TD, color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
-                <td style={TD}>
-                  <Chip label={hasKubeconfig ? 'kubeconfig' : 'inline'} size="small"
-                    style={{ fontSize: 10, height: 18, background: hasKubeconfig ? '#e8f5e9' : '#fff3e0', color: '#1a1a1a' }} />
+                <td className={`${styles.td} ${styles.nameCell}`} style={{ color: '#1565c0' }}>{item.metadata?.name}</td>
+                <td className={styles.td} style={{ color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
+                <td className={styles.td}>
+                  <Chip label={hasKubeconfig ? 'kubeconfig' : 'inline'} size="small" className={styles.chip}
+                    style={{ background: hasKubeconfig ? '#e8f5e9' : '#fff3e0', color: '#1a1a1a' }} />
                 </td>
-                <td style={TD}><SecretRef name={secretName} key={secretKey} /></td>
-                <td style={{ ...TD, color: theme.palette.text.secondary }}>{formatAge(item.metadata?.creationTimestamp)}</td>
+                <td className={styles.td}><SecretRef name={secretName} key={secretKey} /></td>
+                <td className={styles.td} style={{ color: theme.palette.text.secondary }}>{formatAge(item.metadata?.creationTimestamp)}</td>
               </tr>
             );
           })}
           {items.length === 0 && (
-            <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No remote cluster accesses found.</td></tr>
+            <tr><td colSpan={5} className={styles.emptyCell} style={{ color: theme.palette.text.secondary }}>No remote cluster accesses found.</td></tr>
           )}
         </tbody>
       </table>
@@ -131,18 +130,18 @@ function FederatedClusterList() {
 
   return (
     <Box>
-      <Box style={{ padding: '8px 12px', background: 'rgba(106,27,154,0.06)', borderRadius: 6, marginBottom: 14, fontSize: 12, color: '#6a1b9a' }}>
+      <Box className={styles.infoBanner} style={{ background: 'rgba(106,27,154,0.06)', color: '#6a1b9a' }}>
         FederatedClusterAccess discovers multiple remote clusters via label selectors and powers FederatedMetric collection.
       </Box>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <table className={styles.table}>
         <thead>
-          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
-            <th style={TH}>Name</th>
-            <th style={TH}>Namespace</th>
-            <th style={TH}>Target GVK</th>
-            <th style={TH}>Target Namespace</th>
-            <th style={TH}>Config</th>
-            <th style={TH}>Age</th>
+          <tr className={styles.headerRow} style={{ borderBottom: `2px solid ${theme.palette.divider}`, background: theme.palette.background.default }}>
+            <th className={styles.th}>Name</th>
+            <th className={styles.th}>Namespace</th>
+            <th className={styles.th}>Target GVK</th>
+            <th className={styles.th}>Target Namespace</th>
+            <th className={styles.th}>Config</th>
+            <th className={styles.th}>Age</th>
           </tr>
         </thead>
         <tbody>
@@ -151,26 +150,27 @@ function FederatedClusterList() {
             const target = spec.target;
             return (
               <tr key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-                style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
+                className={styles.row}
+                style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
                 onClick={() => launchDetail(item, 'FederatedClusterAccess')}>
-                <td style={{ ...TD, fontWeight: 600, color: '#6a1b9a' }}>{item.metadata?.name}</td>
-                <td style={{ ...TD, color: '#555' }}>{item.metadata?.namespace}</td>
-                <td style={{ ...TD, fontFamily: 'monospace', fontSize: 11 }}>
+                <td className={`${styles.td} ${styles.nameCell}`} style={{ color: '#6a1b9a' }}>{item.metadata?.name}</td>
+                <td className={styles.td} style={{ color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
+                <td className={`${styles.td} ${styles.mono}`}>
                   {target ? `${target.group}/${target.version}/${target.kind}` : '—'}
                 </td>
-                <td style={{ ...TD, fontFamily: 'monospace', fontSize: 11 }}>{spec.namespace ?? '—'}</td>
-                <td style={TD}>
+                <td className={`${styles.td} ${styles.mono}`}>{spec.namespace ?? '—'}</td>
+                <td className={styles.td}>
                   <Chip
                     label={spec.kubeConfigPath ? 'path' : spec.secretRefPath ? 'secret' : '—'}
                     size="small"
-                    style={{ fontSize: 10, height: 18 }} />
+                    className={styles.chip} />
                 </td>
-                <td style={{ ...TD, color: theme.palette.text.secondary }}>{formatAge(item.metadata?.creationTimestamp)}</td>
+                <td className={styles.td} style={{ color: theme.palette.text.secondary }}>{formatAge(item.metadata?.creationTimestamp)}</td>
               </tr>
             );
           })}
           {items.length === 0 && (
-            <tr><td colSpan={6} style={{ padding: 32, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No federated cluster accesses found.</td></tr>
+            <tr><td colSpan={6} className={styles.emptyCell} style={{ color: theme.palette.text.secondary }}>No federated cluster accesses found.</td></tr>
           )}
         </tbody>
       </table>
@@ -189,9 +189,9 @@ export default function ClusterAccessTabs() {
 
   return (
     <SectionBox title="Cluster Access" headerProps={{ headerStyle: 'main' }}>
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: `1px solid ${theme.palette.divider}` }}>
-        <Tab label={`Remote Cluster Access${remoteCount ? ` (${remoteCount})` : ''}`} style={{ fontSize: 13 }} />
-        <Tab label={`Federated Cluster Access${federatedCount ? ` (${federatedCount})` : ''}`} style={{ fontSize: 13 }} />
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} className={styles.tabs} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+        <Tab label={`Remote Cluster Access${remoteCount ? ` (${remoteCount})` : ''}`} className={styles.tab} />
+        <Tab label={`Federated Cluster Access${federatedCount ? ` (${federatedCount})` : ''}`} className={styles.tab} />
       </Tabs>
       {tab === 0 && <RemoteClusterList />}
       {tab === 1 && <FederatedClusterList />}

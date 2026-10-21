@@ -1,0 +1,150 @@
+.detailRoot {
+  padding: 20px;
+}
+
+.title {
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.tabs {
+  margin-bottom: 16px;
+}
+
+.tab {
+  font-size: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerRow {
+  text-align: left;
+}
+
+.thInstances {
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.th {
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.tdName {
+  padding: 7px 12px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.tdSecondary {
+  padding: 7px 12px;
+  font-size: 12px;
+}
+
+.tdMeta {
+  padding: 7px 12px;
+  font-size: 11px;
+}
+
+.tdCell {
+  padding: 7px 12px;
+}
+
+.loadingRow {
+  gap: 10px;
+  padding: 24px;
+}
+
+.emptyBox {
+  padding: 24px;
+}
+
+.filterBar {
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.searchField {
+  min-width: 220px;
+}
+
+.scopeField {
+  min-width: 140px;
+}
+
+.groupField {
+  min-width: 220px;
+}
+
+.countWrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.countChip {
+  font-size: 11px;
+}
+
+.loadingMain {
+  gap: 10px;
+  padding: 32px;
+}
+
+.groupSection {
+  margin-bottom: 16px;
+}
+
+.groupLabel {
+  margin-bottom: 6px;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.groupCountChip {
+  margin-left: 8px;
+  font-size: 10px;
+  height: 18px;
+}
+
+.listTh {
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.listTdKind {
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.listTdMono {
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.listTdCell {
+  padding: 8px 12px;
+}
+
+.row {
+  cursor: pointer;
+}
+
+.scopeChip {
+  font-size: 10px;
+  height: 18px;
+}

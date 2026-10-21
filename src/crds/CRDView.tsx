@@ -3,7 +3,7 @@ import { K8s } from '@kinvolk/headlamp-plugin/lib';
 import { getApiProxy } from '../common/helpers';
 import { SchemaPropertyTree } from '../common/CRDSchema';
 import { StatusBadge } from '../common/StatusBadge';
-import { ConditionsTable } from '../common/ConditionsTable';
+import styles from './CRDView.module.css';
 
 const { Box, Typography, Chip, CircularProgress, TextField, Tabs, Tab, MenuItem, Paper, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
@@ -34,33 +34,33 @@ function InstancesList({ crd }: { crd: any }) {
   }, [crd.metadata?.name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (instances === null) {
-    return <Box display="flex" alignItems="center" style={{ gap: 10, padding: 24 }}><CircularProgress size={16} /><Typography variant="body2">Loading…</Typography></Box>;
+    return <Box display="flex" alignItems="center" className={styles.loadingRow}><CircularProgress size={16} /><Typography variant="body2">Loading…</Typography></Box>;
   }
   if (instances.length === 0) {
-    return <Box style={{ padding: 24 }}><Typography variant="body2" color="textSecondary">No instances found.</Typography></Box>;
+    return <Box className={styles.emptyBox}><Typography variant="body2" color="textSecondary">No instances found.</Typography></Box>;
   }
 
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <table className={styles.table}>
       <thead>
-        <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
-          <th style={{ padding: '7px 12px', fontSize: 11, fontWeight: 600 }}>Name</th>
-          {scope === 'Namespaced' && <th style={{ padding: '7px 12px', fontSize: 11, fontWeight: 600 }}>Namespace</th>}
-          <th style={{ padding: '7px 12px', fontSize: 11, fontWeight: 600 }}>Ready</th>
-          <th style={{ padding: '7px 12px', fontSize: 11, fontWeight: 600 }}>Conditions</th>
-          <th style={{ padding: '7px 12px', fontSize: 11, fontWeight: 600 }}>Age</th>
+        <tr className={styles.headerRow} style={{ borderBottom: `2px solid ${theme.palette.divider}`, background: theme.palette.background.default }}>
+          <th className={styles.thInstances}>Name</th>
+          {scope === 'Namespaced' && <th className={styles.thInstances}>Namespace</th>}
+          <th className={styles.thInstances}>Ready</th>
+          <th className={styles.thInstances}>Conditions</th>
+          <th className={styles.thInstances}>Age</th>
         </tr>
       </thead>
       <tbody>
         {instances.map((inst: any, i: number) => (
           <tr key={i} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
-            <td style={{ padding: '7px 12px', fontWeight: 600, fontSize: 12 }}>{inst.metadata?.name}</td>
-            {scope === 'Namespaced' && <td style={{ padding: '7px 12px', fontSize: 12, color: theme.palette.text.secondary }}>{inst.metadata?.namespace}</td>}
-            <td style={{ padding: '7px 12px' }}><StatusBadge ready={inst.status?.ready ?? 'Unknown'} /></td>
-            <td style={{ padding: '7px 12px', fontSize: 11, color: theme.palette.text.secondary }}>
+            <td className={styles.tdName}>{inst.metadata?.name}</td>
+            {scope === 'Namespaced' && <td className={styles.tdSecondary} style={{ color: theme.palette.text.secondary }}>{inst.metadata?.namespace}</td>}
+            <td className={styles.tdCell}><StatusBadge ready={inst.status?.ready ?? 'Unknown'} /></td>
+            <td className={styles.tdMeta} style={{ color: theme.palette.text.secondary }}>
               {(inst.status?.conditions ?? []).length || '—'}
             </td>
-            <td style={{ padding: '7px 12px', fontSize: 11, color: theme.palette.text.secondary }}>
+            <td className={styles.tdMeta} style={{ color: theme.palette.text.secondary }}>
               {inst.metadata?.creationTimestamp ? new Date(inst.metadata.creationTimestamp).toLocaleDateString() : '—'}
             </td>
           </tr>
@@ -83,16 +83,16 @@ function CRDDetailView({ crd }: { crd: any }) {
   const plural: string = spec.names?.plural ?? '';
 
   return (
-    <Box style={{ padding: 20 }}>
-      <Typography variant="h6" style={{ marginBottom: 4 }}>{kind}</Typography>
-      <Typography variant="caption" color="textSecondary" style={{ display: 'block', marginBottom: 16 }}>
+    <Box className={styles.detailRoot}>
+      <Typography variant="h6" className={styles.title}>{kind}</Typography>
+      <Typography variant="caption" color="textSecondary" className={styles.subtitle}>
         {group} · {topVersion} · {scope}
       </Typography>
 
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: `1px solid ${theme.palette.divider}` }}>
-        <Tab label="Overview" style={{ fontSize: 12 }} />
-        <Tab label="Instances" style={{ fontSize: 12 }} />
-        <Tab label="Schema" style={{ fontSize: 12 }} />
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} className={styles.tabs} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+        <Tab label="Overview" className={styles.tab} />
+        <Tab label="Instances" className={styles.tab} />
+        <Tab label="Schema" className={styles.tab} />
       </Tabs>
 
       {tab === 0 && (
@@ -101,7 +101,7 @@ function CRDDetailView({ crd }: { crd: any }) {
           { name: 'Group', value: React.createElement('span', { style: { fontFamily: 'monospace' } }, group) },
           { name: 'Versions', value: versions.map((v: any) => v.name).join(', ') },
           { name: 'Plural', value: React.createElement('span', { style: { fontFamily: 'monospace' } }, plural) },
-          { name: 'Scope', value: React.createElement(Chip, { label: scope, size: 'small', style: { background: scope === 'Namespaced' ? '#e3f2fd' : '#fce4ec', color: '#1a1a1a', fontSize: 10, height: 18 } }) },
+          { name: 'Scope', value: React.createElement(Chip, { label: scope, size: 'small', className: styles.scopeChip, style: { background: scope === 'Namespaced' ? '#e3f2fd' : '#fce4ec', color: '#1a1a1a' } }) },
           ...(openAPISchema?.description ? [{ name: 'Description', value: openAPISchema.description }] : []),
         ]} />
       )}
@@ -167,7 +167,7 @@ export default function CRDView() {
 
   if (!allCrds) {
     return (
-      <Box display="flex" alignItems="center" style={{ gap: 10, padding: 32 }}>
+      <Box display="flex" alignItems="center" className={styles.loadingMain}>
         <CircularProgress size={20} /><Typography>Loading CRDs…</Typography>
       </Box>
     );
@@ -175,22 +175,22 @@ export default function CRDView() {
 
   return (
     <SectionBox title="CRDs" headerProps={{ headerStyle: 'main' }}>
-      <Box display="flex" style={{ gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+      <Box display="flex" className={styles.filterBar}>
         <TextField size="small" placeholder="Search kind or group…" value={search}
-          onChange={(e: any) => setSearch(e.target.value)} style={{ minWidth: 220 }} />
+          onChange={(e: any) => setSearch(e.target.value)} className={styles.searchField} />
         <TextField select size="small" value={scopeFilter}
-          onChange={(e: any) => setScopeFilter(e.target.value)} style={{ minWidth: 140 }}>
+          onChange={(e: any) => setScopeFilter(e.target.value)} className={styles.scopeField}>
           <MenuItem value="all">All scopes</MenuItem>
           <MenuItem value="Cluster">Cluster</MenuItem>
           <MenuItem value="Namespaced">Namespaced</MenuItem>
         </TextField>
         <TextField select size="small" value={groupFilter}
-          onChange={(e: any) => setGroupFilter(e.target.value)} style={{ minWidth: 220 }}>
+          onChange={(e: any) => setGroupFilter(e.target.value)} className={styles.groupField}>
           <MenuItem value="all">All groups</MenuItem>
           {apiGroups.map(g => <MenuItem key={g} value={g}>{g}</MenuItem>)}
         </TextField>
-        <Box style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
-          <Chip label={`${filtered.length} CRDs`} size="small" style={{ fontSize: 11 }} />
+        <Box className={styles.countWrap}>
+          <Chip label={`${filtered.length} CRDs`} size="small" className={styles.countChip} />
         </Box>
       </Box>
 
@@ -198,19 +198,19 @@ export default function CRDView() {
         <Typography color="textSecondary">No CRDs found for {OPERATOR_GROUPS.join(', ')} groups.</Typography>
       ) : (
         Object.entries(byGroup).sort(([a], [b]) => a.localeCompare(b)).map(([group, crds]) => (
-          <Box key={group} style={{ marginBottom: 16 }}>
-            <Typography variant="subtitle2" style={{ marginBottom: 6, color: '#555', fontFamily: 'monospace', fontSize: 12 }}>
+          <Box key={group} className={styles.groupSection}>
+            <Typography variant="subtitle2" className={styles.groupLabel} style={{ color: theme.palette.text.secondary }}>
               {group}
-              <Chip label={(crds as any[]).length} size="small" style={{ marginLeft: 8, fontSize: 10, height: 18 }} />
+              <Chip label={(crds as any[]).length} size="small" className={styles.groupCountChip} />
             </Typography>
             <Paper elevation={1}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table className={styles.table}>
                 <thead>
-                  <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
-                    <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 11 }}>Kind</th>
-                    <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 11 }}>Version</th>
-                    <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 11 }}>Scope</th>
-                    <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 11 }}>Plural</th>
+                  <tr className={styles.headerRow} style={{ borderBottom: `2px solid ${theme.palette.divider}`, background: theme.palette.background.default }}>
+                    <th className={styles.listTh}>Kind</th>
+                    <th className={styles.listTh}>Version</th>
+                    <th className={styles.listTh}>Scope</th>
+                    <th className={styles.listTh}>Plural</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -221,14 +221,14 @@ export default function CRDView() {
                     const topVer: string = spec.versions?.[0]?.name ?? '';
                     const plural: string = spec.names?.plural ?? '';
                     return (
-                      <tr key={crd.metadata?.name} style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
+                      <tr key={crd.metadata?.name} className={styles.row} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
                         onClick={() => openCRDDetail(crd)}>
-                        <td style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12, color: '#1565c0' }}>{kind}</td>
-                        <td style={{ padding: '8px 12px', fontFamily: 'monospace', fontSize: 11 }}>{topVer}</td>
-                        <td style={{ padding: '8px 12px' }}>
-                          <Chip label={scope} size="small" style={{ background: scope === 'Namespaced' ? '#e3f2fd' : '#fce4ec', color: '#1a1a1a', fontSize: 10, height: 18 }} />
+                        <td className={styles.listTdKind} style={{ color: '#1565c0' }}>{kind}</td>
+                        <td className={styles.listTdMono}>{topVer}</td>
+                        <td className={styles.listTdCell}>
+                          <Chip label={scope} size="small" className={styles.scopeChip} style={{ background: scope === 'Namespaced' ? '#e3f2fd' : '#fce4ec', color: '#1a1a1a' }} />
                         </td>
-                        <td style={{ padding: '8px 12px', fontFamily: 'monospace', fontSize: 11, color: theme.palette.text.secondary }}>{plural}</td>
+                        <td className={styles.listTdMono} style={{ color: theme.palette.text.secondary }}>{plural}</td>
                       </tr>
                     );
                   })}

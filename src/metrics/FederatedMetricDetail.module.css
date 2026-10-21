@@ -1,0 +1,64 @@
+.tabs {
+  margin-bottom: 16px;
+}
+
+.tab {
+  font-size: 12px;
+}
+
+.infoBanner {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+
+.statCardRow {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.statCard {
+  text-align: center;
+  border-radius: 8px;
+  padding: 12px 24px;
+  min-width: 80px;
+}
+
+.statValue {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerRow {
+  text-align: left;
+}
+
+.th {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.td {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.yamlPane {
+  height: 500px;
+}

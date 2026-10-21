@@ -1,5 +1,6 @@
 import React from 'react';
 import { moColors } from './colors';
+import styles from './KindBadge.module.css';
 
 const { Chip } = (window as any).pluginLib?.MuiCore ?? {};
 
@@ -32,12 +33,10 @@ export function KindBadge({ kind, style }: KindBadgeProps) {
     <Chip
       label={label}
       size="small"
+      className={styles.badge}
       style={{
         background: color.bg,
         color: color.text,
-        fontWeight: 600,
-        fontSize: 11,
-        height: 22,
         ...style,
       }}
     />

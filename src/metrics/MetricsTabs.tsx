@@ -3,6 +3,7 @@ import MetricList from './MetricList';
 import ManagedMetricList from './ManagedMetricList';
 import FederatedMetricList from './FederatedMetricList';
 import { Metric, ManagedMetric, FederatedMetric, FederatedManagedMetric } from '../common/Resources';
+import styles from './MetricsTabs.module.css';
 
 const { Box, Tabs, Tab, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { SectionBox } = (window as any).pluginLib?.CommonComponents ?? {};
@@ -32,8 +33,8 @@ export default function MetricsTabs() {
 
   return (
     <SectionBox title="Metrics" headerProps={{ headerStyle: 'main' }}>
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: `1px solid ${theme.palette.divider}` }}>
-        {tabLabels.map((label, i) => <Tab key={i} label={label} style={{ fontSize: 13 }} />)}
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} className={styles.tabs} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+        {tabLabels.map((label, i) => <Tab key={i} label={label} className={styles.tab} />)}
       </Tabs>
 
       {tab === 0 && <MetricList />}

@@ -199,7 +199,7 @@ export function YamlEditor({ item, onSave, readOnly = false, initialStage, schem
         {stage === 'edit' && (
           <>
             <Button size="small" variant="text" onClick={handleFormat}
-              style={{ fontSize: 12, padding: '3px 10px', color: '#555' }}>
+              style={{ fontSize: 12, padding: '3px 10px', color: muiTheme.palette.text.secondary }}>
               Format
             </Button>
             <Button size="small" variant="outlined" onClick={handleDiscard}

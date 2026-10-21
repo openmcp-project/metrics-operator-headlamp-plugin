@@ -2,7 +2,7 @@ import React from 'react';
 import { DataSink } from '../common/Resources';
 import { ConditionsBadge, ConditionsTable } from '../common/ConditionsTable';
 import { formatAge } from '../common/helpers';
-import { moColors } from '../common/colors';
+import styles from './DataSinkList.module.css';
 
 const { Box, Typography, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { SectionBox } = (window as any).pluginLib?.CommonComponents ?? {};
@@ -13,11 +13,7 @@ const PROTOCOL_COLORS: Record<string, string> = {
 
 function ProtocolBadge({ protocol }: { protocol: string }) {
   return (
-    <span style={{
-      display: 'inline-block', padding: '2px 7px', borderRadius: 4, fontSize: 10, fontWeight: 700,
-      background: PROTOCOL_COLORS[protocol] ?? '#616161', color: '#fff', fontFamily: 'monospace',
-      textTransform: 'uppercase',
-    }}>
+    <span className={styles.protocolBadge} style={{ background: PROTOCOL_COLORS[protocol] ?? '#616161', color: '#fff' }}>
       {protocol}
     </span>
   );
@@ -56,16 +52,16 @@ export default function DataSinkList() {
 
   return (
     <SectionBox title="Data Sinks" headerProps={{ headerStyle: 'main' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <table className={styles.table}>
         <thead>
-          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
-            <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Name</th>
-            <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Namespace</th>
-            <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Endpoint</th>
-            <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Protocol</th>
-            <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Auth</th>
-            <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Conditions</th>
-            <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Age</th>
+          <tr className={styles.headerRow} style={{ borderBottom: `2px solid ${theme.palette.divider}`, background: theme.palette.background.default }}>
+            <th className={styles.th}>Name</th>
+            <th className={styles.th}>Namespace</th>
+            <th className={styles.th}>Endpoint</th>
+            <th className={styles.th}>Protocol</th>
+            <th className={styles.th}>Auth</th>
+            <th className={styles.th}>Conditions</th>
+            <th className={styles.th}>Age</th>
           </tr>
         </thead>
         <tbody>
@@ -76,25 +72,26 @@ export default function DataSinkList() {
             return (
               <tr
                 key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-                style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
+                className={styles.row}
+                style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
                 onClick={() => launchDetail(item)}
               >
-                <td style={{ padding: '8px 12px', fontWeight: 600, color: '#1565c0', fontSize: 12 }}>
+                <td className={styles.nameCell} style={{ color: '#1565c0' }}>
                   {item.metadata?.name}
                   {item.metadata?.name === 'default' && (
-                    <Chip label="default" size="small" style={{ marginLeft: 6, fontSize: 9, height: 16, background: '#e3f2fd', color: '#1565c0' }} />
+                    <Chip label="default" size="small" className={styles.defaultChip} style={{ background: '#e3f2fd', color: '#1565c0' }} />
                   )}
                 </td>
-                <td style={{ padding: '8px 12px', fontSize: 12, color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
-                <td style={{ padding: '8px 12px', fontSize: 11, fontFamily: 'monospace', maxWidth: 280, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <td className={styles.td} style={{ color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
+                <td className={styles.endpointCell}>
                   {item.spec?.connection?.endpoint ?? '—'}
                 </td>
-                <td style={{ padding: '8px 12px' }}><ProtocolBadge protocol={protocol} /></td>
-                <td style={{ padding: '8px 12px' }}><AuthBadge authType={authType} /></td>
-                <td style={{ padding: '8px 12px' }} onClick={e => e.stopPropagation()}>
+                <td className={styles.badgeCell}><ProtocolBadge protocol={protocol} /></td>
+                <td className={styles.badgeCell}><AuthBadge authType={authType} /></td>
+                <td className={styles.badgeCell} onClick={e => e.stopPropagation()}>
                   <ConditionsBadge conditions={conditions} />
                 </td>
-                <td style={{ padding: '8px 12px', fontSize: 11, color: theme.palette.text.secondary }}>
+                <td className={styles.ageCell} style={{ color: theme.palette.text.secondary }}>
                   {formatAge(item.metadata?.creationTimestamp)}
                 </td>
               </tr>
@@ -102,7 +99,7 @@ export default function DataSinkList() {
           })}
           {items.length === 0 && (
             <tr>
-              <td colSpan={7} style={{ padding: '48px', textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>
+              <td colSpan={7} className={styles.emptyCell} style={{ color: theme.palette.text.secondary }}>
                 No DataSinks found. Create one to start exporting metrics.
               </td>
             </tr>

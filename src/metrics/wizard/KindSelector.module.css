@@ -1,0 +1,58 @@
+.card {
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  flex: 1;
+  min-width: 200px;
+}
+
+.cardHeader {
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.radio {
+  padding: 0;
+}
+
+.kindBadge {
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.cardTitle {
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.cardDescription {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.featureList {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 11px;
+}
+
+.featureItem {
+  margin-bottom: 2px;
+}
+
+.selectorTitle {
+  margin-bottom: 6px;
+}
+
+.selectorSubtitle {
+  margin-bottom: 18px;
+}
+
+.cardGrid {
+  gap: 12px;
+  flex-wrap: wrap;
+}

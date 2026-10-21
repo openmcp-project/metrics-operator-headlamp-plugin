@@ -1,5 +1,6 @@
 import React from 'react';
 import { moColors } from '../../common/colors';
+import styles from './KindSelector.module.css';
 
 const { Box, Typography, Radio, RadioGroup, FormControlLabel, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
@@ -20,43 +21,35 @@ function KindCard({ kind, selected, onSelect, title, description, features, colo
   return (
     <Box
       onClick={onSelect}
+      className={styles.card}
       style={{
         border: `2px solid ${selected ? color : theme.palette.divider}`,
-        borderRadius: 8,
-        padding: '14px 16px',
-        cursor: 'pointer',
         background: selected ? `rgba(${hexToRgb(color)}, 0.05)` : theme.palette.background.paper,
-        transition: 'border-color 0.15s, background 0.15s',
-        flex: 1,
-        minWidth: 200,
       }}>
-      <Box display="flex" alignItems="center" style={{ gap: 10, marginBottom: 8 }}>
+      <Box display="flex" alignItems="center" className={styles.cardHeader}>
         <Radio
           checked={selected}
           onChange={onSelect}
           size="small"
-          style={{ padding: 0, color }}
+          className={styles.radio}
+          style={{ color }}
           onClick={(e: any) => e.stopPropagation()}
         />
         <Box
+          className={styles.kindBadge}
           style={{
             background: color,
             color: '#fff',
-            borderRadius: 4,
-            padding: '2px 8px',
-            fontSize: 11,
-            fontWeight: 700,
-            fontFamily: 'monospace',
           }}>
           {kind}
         </Box>
       </Box>
-      <Typography variant="subtitle2" style={{ marginBottom: 4, fontWeight: 700 }}>{title}</Typography>
-      <Typography variant="body2" color="textSecondary" style={{ fontSize: 12, marginBottom: 10 }}>
+      <Typography variant="subtitle2" className={styles.cardTitle}>{title}</Typography>
+      <Typography variant="body2" color="textSecondary" className={styles.cardDescription}>
         {description}
       </Typography>
-      <ul style={{ margin: 0, paddingLeft: 16, fontSize: 11, color: theme.palette.text.secondary }}>
-        {features.map(f => <li key={f} style={{ marginBottom: 2 }}>{f}</li>)}
+      <ul className={styles.featureList} style={{ color: theme.palette.text.secondary }}>
+        {features.map(f => <li key={f} className={styles.featureItem}>{f}</li>)}
       </ul>
     </Box>
   );
@@ -134,11 +127,11 @@ export function KindSelector({ value, onChange }: Props) {
 
   return (
     <Box>
-      <Typography variant="h6" style={{ marginBottom: 6 }}>Select metric kind</Typography>
-      <Typography variant="body2" color="textSecondary" style={{ marginBottom: 18 }}>
+      <Typography variant="h6" className={styles.selectorTitle}>Select metric kind</Typography>
+      <Typography variant="body2" color="textSecondary" className={styles.selectorSubtitle}>
         Choose the type of metric you want to create. Each kind is suited for different target scopes.
       </Typography>
-      <Box display="flex" style={{ gap: 12, flexWrap: 'wrap' }}>
+      <Box display="flex" className={styles.cardGrid}>
         {kinds.map(k => (
           <KindCard key={k.kind} {...k} selected={value === k.kind} onSelect={() => onChange(k.kind)} />
         ))}
