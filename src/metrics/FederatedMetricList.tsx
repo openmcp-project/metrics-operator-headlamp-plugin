@@ -7,7 +7,7 @@ import { formatAge } from '../common/helpers';
 import { moColors } from '../common/colors';
 import { FederatedMetricDetail } from './FederatedMetricDetail';
 
-const { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip } =
+const { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
 
 const TH: React.CSSProperties = { padding: '8px 12px', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap' };
@@ -18,6 +18,7 @@ interface Props {
 }
 
 export default function FederatedMetricList({ kind }: Props) {
+  const theme = useTheme();
   const [federated] = FederatedMetric.useList() as [any[], any];
   const [federatedManaged] = FederatedManagedMetric.useList() as [any[], any];
   const [search, setSearch] = useState('');
@@ -72,7 +73,7 @@ export default function FederatedMetricList({ kind }: Props) {
 
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
-          <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
+          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
             <th style={TH}>Name</th>
             <th style={TH}>Namespace</th>
             {!isFedManaged && <th style={TH}>Target GVK</th>}
@@ -90,22 +91,22 @@ export default function FederatedMetricList({ kind }: Props) {
             const obs = item.status?.observation ?? {};
             return (
               <tr key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-                style={{ borderBottom: '1px solid #f0f0f0', cursor: 'pointer' }}
+                style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
                 onClick={() => launchDetail(item)}>
                 <td style={{ ...TD, fontWeight: 600, color: '#1565c0' }}>{item.metadata?.name}</td>
-                <td style={{ ...TD, color: '#555' }}>{item.metadata?.namespace}</td>
+                <td style={{ ...TD, color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
                 {!isFedManaged && <td style={TD}><GVKChip group={item.spec?.target?.group ?? ''} version={item.spec?.target?.version ?? ''} kind={item.spec?.target?.kind ?? ''} /></td>}
                 <td style={TD}><StatusBadge ready={item.status?.ready ?? 'Unknown'} /></td>
                 <td style={TD}><Chip label={obs.activeCount ?? 0} size="small" style={{ background: moColors.ready.bg, color: '#fff', fontWeight: 700, fontSize: 11, height: 20 }} /></td>
-                <td style={TD}>{(obs.failedCount ?? 0) > 0 ? <Chip label={obs.failedCount} size="small" style={{ background: moColors.failed.bg, color: '#fff', fontWeight: 700, fontSize: 11, height: 20 }} /> : <span style={{ color: '#888', fontSize: 12 }}>0</span>}</td>
-                <td style={TD}>{(obs.pendingCount ?? 0) > 0 ? <Chip label={obs.pendingCount} size="small" style={{ background: moColors.pending.bg, color: '#fff', fontWeight: 700, fontSize: 11, height: 20 }} /> : <span style={{ color: '#888', fontSize: 12 }}>0</span>}</td>
+                <td style={TD}>{(obs.failedCount ?? 0) > 0 ? <Chip label={obs.failedCount} size="small" style={{ background: moColors.failed.bg, color: '#fff', fontWeight: 700, fontSize: 11, height: 20 }} /> : <span style={{ color: theme.palette.text.secondary, fontSize: 12 }}>0</span>}</td>
+                <td style={TD}>{(obs.pendingCount ?? 0) > 0 ? <Chip label={obs.pendingCount} size="small" style={{ background: moColors.pending.bg, color: '#fff', fontWeight: 700, fontSize: 11, height: 20 }} /> : <span style={{ color: theme.palette.text.secondary, fontSize: 12 }}>0</span>}</td>
                 <td style={TD}>{item.spec?.dataSinkRef?.name ? <Chip label={item.spec.dataSinkRef.name} size="small" style={{ fontSize: 10, height: 18 }} /> : '—'}</td>
-                <td style={{ ...TD, color: '#888' }}>{formatAge(item.status?.lastReconcileTime)}</td>
+                <td style={{ ...TD, color: theme.palette.text.secondary }}>{formatAge(item.status?.lastReconcileTime)}</td>
                 <td style={TD} onClick={e => e.stopPropagation()}><ConditionsBadge conditions={item.status?.conditions ?? []} /></td>
               </tr>
             );
           })}
-          {filtered.length === 0 && <tr><td colSpan={isFedManaged ? 9 : 10} style={{ padding: 32, textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No federated metrics found.</td></tr>}
+          {filtered.length === 0 && <tr><td colSpan={isFedManaged ? 9 : 10} style={{ padding: 32, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No federated metrics found.</td></tr>}
         </tbody>
       </table>
     </Box>

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DataSink } from '../common/Resources';
 import { ConditionsBadge, ConditionsTable } from '../common/ConditionsTable';
 import { formatAge } from '../common/helpers';
 import { moColors } from '../common/colors';
-import { DataSinkForm } from './DataSinkForm';
 
-const { Box, Typography, Chip, Button } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { SectionBox } = (window as any).pluginLib?.CommonComponents ?? {};
 
 const PROTOCOL_COLORS: Record<string, string> = {
@@ -50,33 +49,16 @@ function launchDetail(item: any) {
 }
 
 export default function DataSinkList() {
+  const theme = useTheme();
   const [dataSinks] = DataSink.useList() as [any[], any];
-  const [showCreate, setShowCreate] = useState(false);
 
   const items = dataSinks?.map((d: any) => d.jsonData ?? d) ?? [];
 
   return (
-    <SectionBox
-      title="Data Sinks"
-      headerProps={{
-        headerStyle: 'main',
-        actions: [
-          <Button key="create" variant="contained" size="small" onClick={() => setShowCreate(true)}
-            style={{ background: '#1565c0' }}>
-            + Create DataSink
-          </Button>,
-        ],
-      }}
-    >
-      {showCreate && (
-        <Box style={{ marginBottom: 24, border: '1px solid #e0e0e0', borderRadius: 8, overflow: 'hidden' }}>
-          <DataSinkForm onClose={() => setShowCreate(false)} onCreated={() => setShowCreate(false)} />
-        </Box>
-      )}
-
+    <SectionBox title="Data Sinks" headerProps={{ headerStyle: 'main' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
-          <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
+          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
             <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Name</th>
             <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Namespace</th>
             <th style={{ padding: '8px 12px', fontWeight: 600, fontSize: 12 }}>Endpoint</th>
@@ -94,7 +76,7 @@ export default function DataSinkList() {
             return (
               <tr
                 key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-                style={{ borderBottom: '1px solid #f0f0f0', cursor: 'pointer' }}
+                style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
                 onClick={() => launchDetail(item)}
               >
                 <td style={{ padding: '8px 12px', fontWeight: 600, color: '#1565c0', fontSize: 12 }}>
@@ -103,7 +85,7 @@ export default function DataSinkList() {
                     <Chip label="default" size="small" style={{ marginLeft: 6, fontSize: 9, height: 16, background: '#e3f2fd', color: '#1565c0' }} />
                   )}
                 </td>
-                <td style={{ padding: '8px 12px', fontSize: 12, color: '#555' }}>{item.metadata?.namespace}</td>
+                <td style={{ padding: '8px 12px', fontSize: 12, color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
                 <td style={{ padding: '8px 12px', fontSize: 11, fontFamily: 'monospace', maxWidth: 280, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {item.spec?.connection?.endpoint ?? '—'}
                 </td>
@@ -112,7 +94,7 @@ export default function DataSinkList() {
                 <td style={{ padding: '8px 12px' }} onClick={e => e.stopPropagation()}>
                   <ConditionsBadge conditions={conditions} />
                 </td>
-                <td style={{ padding: '8px 12px', fontSize: 11, color: '#888' }}>
+                <td style={{ padding: '8px 12px', fontSize: 11, color: theme.palette.text.secondary }}>
                   {formatAge(item.metadata?.creationTimestamp)}
                 </td>
               </tr>
@@ -120,7 +102,7 @@ export default function DataSinkList() {
           })}
           {items.length === 0 && (
             <tr>
-              <td colSpan={7} style={{ padding: '48px', textAlign: 'center', color: '#888', fontStyle: 'italic' }}>
+              <td colSpan={7} style={{ padding: '48px', textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>
                 No DataSinks found. Create one to start exporting metrics.
               </td>
             </tr>

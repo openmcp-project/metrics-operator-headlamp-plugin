@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchApiGroups } from './schemaHelpers';
 import { FederatedClusterAccess } from '../../common/Resources';
 
-const { Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress, Chip } =
+const { Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress, Chip, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
 
 export interface SelectedGVK {
@@ -24,6 +24,7 @@ const TH: React.CSSProperties = { padding: '7px 12px', fontWeight: 600, fontSize
 const TD: React.CSSProperties = { padding: '7px 12px', fontSize: 12, verticalAlign: 'middle' };
 
 export function ResourcePicker({ value, onChange, requireFederatedAccess, federatedAccessRef, onFederatedAccessChange }: Props) {
+  const theme = useTheme();
   const [apiGroups, setApiGroups] = useState<SelectedGVK[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -95,10 +96,10 @@ export function ResourcePicker({ value, onChange, requireFederatedAccess, federa
           <Typography variant="body2" color="textSecondary">Loading API resources…</Typography>
         </Box>
       ) : (
-        <Box style={{ maxHeight: 380, overflowY: 'auto', border: '1px solid #e0e0e0', borderRadius: 6 }}>
+        <Box style={{ maxHeight: 380, overflowY: 'auto', border: `1px solid ${theme.palette.divider}`, borderRadius: 6 }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead style={{ position: 'sticky', top: 0, background: '#fafafa', zIndex: 1 }}>
-              <tr style={{ borderBottom: '2px solid #e0e0e0' }}>
+            <thead style={{ position: 'sticky', top: 0, background: theme.palette.background.default, zIndex: 1 }}>
+              <tr style={{ borderBottom: `2px solid ${theme.palette.divider}` }}>
                 <th style={TH}>Kind</th>
                 <th style={TH}>Group</th>
                 <th style={TH}>Version</th>
@@ -113,22 +114,22 @@ export function ResourcePicker({ value, onChange, requireFederatedAccess, federa
                     key={i}
                     onClick={() => onChange(r)}
                     style={{
-                      borderBottom: '1px solid #f0f0f0',
+                      borderBottom: `1px solid ${theme.palette.divider}`,
                       cursor: 'pointer',
                       background: selected ? 'rgba(21,101,192,0.08)' : undefined,
                     }}>
                     <td style={{ ...TD, fontWeight: selected ? 700 : 600, color: selected ? '#1565c0' : undefined }}>{r.kind}</td>
-                    <td style={{ ...TD, fontFamily: 'monospace', fontSize: 11, color: '#555' }}>{r.group || '(core)'}</td>
+                    <td style={{ ...TD, fontFamily: 'monospace', fontSize: 11, color: theme.palette.text.secondary }}>{r.group || '(core)'}</td>
                     <td style={{ ...TD, fontFamily: 'monospace', fontSize: 11 }}>{r.version}</td>
                     <td style={TD}>
                       <Chip label={r.namespaced ? 'Namespaced' : 'Cluster'} size="small"
-                        style={{ fontSize: 10, height: 18, background: r.namespaced ? '#e3f2fd' : '#fce4ec' }} />
+                        style={{ fontSize: 10, height: 18, background: r.namespaced ? '#e3f2fd' : '#fce4ec', color: '#1a1a1a' }} />
                     </td>
                   </tr>
                 );
               })}
               {filtered.length === 0 && (
-                <tr><td colSpan={4} style={{ padding: 24, textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No resources found.</td></tr>
+                <tr><td colSpan={4} style={{ padding: 24, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No resources found.</td></tr>
               )}
             </tbody>
           </table>

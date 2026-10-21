@@ -3,7 +3,7 @@ import { getApiProxy } from '../common/helpers';
 import * as jsYaml from 'js-yaml';
 import { YamlEditor } from '../common/YamlEditor';
 
-const { Box, Typography, Button, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel, Alert, Divider } =
+const { Box, Typography, Button, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel, Alert, Divider, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
 
 const GROUP = 'metrics.openmcp.cloud';
@@ -44,6 +44,7 @@ function buildYaml(values: any): string {
 }
 
 export function DataSinkForm({ onClose, onCreated }: DataSinkFormProps) {
+  const theme = useTheme();
   const [stage, setStage] = useState<FormStage>('form');
   const [name, setName] = useState('');
   const [namespace, setNamespace] = useState('default');
@@ -91,7 +92,7 @@ export function DataSinkForm({ onClose, onCreated }: DataSinkFormProps) {
   if (stage === 'yaml') {
     return (
       <Box style={{ height: 500 }}>
-        <Box style={{ padding: '12px 16px', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Box style={{ padding: '12px 16px', borderBottom: `1px solid ${theme.palette.divider}`, display: 'flex', alignItems: 'center', gap: 8 }}>
           <Button size="small" variant="outlined" onClick={() => setStage('form')}>← Back</Button>
           <Typography variant="subtitle2">Review & Create DataSink</Typography>
         </Box>

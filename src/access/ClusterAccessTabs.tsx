@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { RemoteClusterAccess, FederatedClusterAccess } from '../common/Resources';
 import { formatAge } from '../common/helpers';
 
-const { Box, Typography, Tabs, Tab, Chip } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Tabs, Tab, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { SectionBox, NameValueTable } = (window as any).pluginLib?.CommonComponents ?? {};
 
 const TH: React.CSSProperties = { padding: '8px 12px', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap' };
 const TD: React.CSSProperties = { padding: '8px 12px', fontSize: 12, verticalAlign: 'middle' };
 
 function SecretRef({ name, key }: { name?: string; key?: string }) {
-  if (!name) return <span style={{ color: '#888' }}>—</span>;
+  const theme = useTheme();
+  if (!name) return <span style={{ color: theme.palette.text.secondary }}>—</span>;
   return (
     <span style={{ fontFamily: 'monospace', fontSize: 11 }}>
-      {name}{key ? `[${key}]` : ''} <span style={{ color: '#888' }}>🔒</span>
+      {name}{key ? `[${key}]` : ''} <span style={{ color: theme.palette.text.secondary }}>🔒</span>
     </span>
   );
 }
@@ -73,6 +74,7 @@ function launchDetail(item: any, kind: 'RemoteClusterAccess' | 'FederatedCluster
 }
 
 function RemoteClusterList() {
+  const theme = useTheme();
   const [remotes] = (RemoteClusterAccess as any).useList() as [any[], any];
   const items = (remotes ?? []).map((r: any) => r.jsonData ?? r);
 
@@ -84,7 +86,7 @@ function RemoteClusterList() {
       </Box>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
-          <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
+          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
             <th style={TH}>Name</th>
             <th style={TH}>Namespace</th>
             <th style={TH}>Config Type</th>
@@ -100,21 +102,21 @@ function RemoteClusterList() {
             const secretKey = spec.kubeConfigSecretRef?.key ?? spec.remoteClusterConfig?.bearerTokenSecretKeyRef?.key;
             return (
               <tr key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-                style={{ borderBottom: '1px solid #f0f0f0', cursor: 'pointer' }}
+                style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
                 onClick={() => launchDetail(item, 'RemoteClusterAccess')}>
                 <td style={{ ...TD, fontWeight: 600, color: '#1565c0' }}>{item.metadata?.name}</td>
-                <td style={{ ...TD, color: '#555' }}>{item.metadata?.namespace}</td>
+                <td style={{ ...TD, color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
                 <td style={TD}>
                   <Chip label={hasKubeconfig ? 'kubeconfig' : 'inline'} size="small"
-                    style={{ fontSize: 10, height: 18, background: hasKubeconfig ? '#e8f5e9' : '#fff3e0' }} />
+                    style={{ fontSize: 10, height: 18, background: hasKubeconfig ? '#e8f5e9' : '#fff3e0', color: '#1a1a1a' }} />
                 </td>
                 <td style={TD}><SecretRef name={secretName} key={secretKey} /></td>
-                <td style={{ ...TD, color: '#888' }}>{formatAge(item.metadata?.creationTimestamp)}</td>
+                <td style={{ ...TD, color: theme.palette.text.secondary }}>{formatAge(item.metadata?.creationTimestamp)}</td>
               </tr>
             );
           })}
           {items.length === 0 && (
-            <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No remote cluster accesses found.</td></tr>
+            <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No remote cluster accesses found.</td></tr>
           )}
         </tbody>
       </table>
@@ -123,6 +125,7 @@ function RemoteClusterList() {
 }
 
 function FederatedClusterList() {
+  const theme = useTheme();
   const [federated] = (FederatedClusterAccess as any).useList() as [any[], any];
   const items = (federated ?? []).map((f: any) => f.jsonData ?? f);
 
@@ -133,7 +136,7 @@ function FederatedClusterList() {
       </Box>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
-          <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
+          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
             <th style={TH}>Name</th>
             <th style={TH}>Namespace</th>
             <th style={TH}>Target GVK</th>
@@ -148,7 +151,7 @@ function FederatedClusterList() {
             const target = spec.target;
             return (
               <tr key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-                style={{ borderBottom: '1px solid #f0f0f0', cursor: 'pointer' }}
+                style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
                 onClick={() => launchDetail(item, 'FederatedClusterAccess')}>
                 <td style={{ ...TD, fontWeight: 600, color: '#6a1b9a' }}>{item.metadata?.name}</td>
                 <td style={{ ...TD, color: '#555' }}>{item.metadata?.namespace}</td>
@@ -162,12 +165,12 @@ function FederatedClusterList() {
                     size="small"
                     style={{ fontSize: 10, height: 18 }} />
                 </td>
-                <td style={{ ...TD, color: '#888' }}>{formatAge(item.metadata?.creationTimestamp)}</td>
+                <td style={{ ...TD, color: theme.palette.text.secondary }}>{formatAge(item.metadata?.creationTimestamp)}</td>
               </tr>
             );
           })}
           {items.length === 0 && (
-            <tr><td colSpan={6} style={{ padding: 32, textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No federated cluster accesses found.</td></tr>
+            <tr><td colSpan={6} style={{ padding: 32, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No federated cluster accesses found.</td></tr>
           )}
         </tbody>
       </table>
@@ -176,6 +179,7 @@ function FederatedClusterList() {
 }
 
 export default function ClusterAccessTabs() {
+  const theme = useTheme();
   const [remotes] = (RemoteClusterAccess as any).useList() as [any[], any];
   const [federated] = (FederatedClusterAccess as any).useList() as [any[], any];
   const [tab, setTab] = useState(0);
@@ -185,7 +189,7 @@ export default function ClusterAccessTabs() {
 
   return (
     <SectionBox title="Cluster Access" headerProps={{ headerStyle: 'main' }}>
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: '1px solid #e0e0e0' }}>
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: `1px solid ${theme.palette.divider}` }}>
         <Tab label={`Remote Cluster Access${remoteCount ? ` (${remoteCount})` : ''}`} style={{ fontSize: 13 }} />
         <Tab label={`Federated Cluster Access${federatedCount ? ` (${federatedCount})` : ''}`} style={{ fontSize: 13 }} />
       </Tabs>

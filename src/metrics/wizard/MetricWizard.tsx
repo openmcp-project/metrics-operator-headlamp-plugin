@@ -6,7 +6,7 @@ import { MetricForm, MetricFormValues } from './MetricForm';
 import { ReviewYaml } from './ReviewYaml';
 import { ProposalConfig } from './proposals';
 
-const { Box, Typography, Stepper, Step, StepLabel, Button, Alert } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Stepper, Step, StepLabel, Button, Alert, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 const STEPS_WITH_TARGET = ['Select Kind', 'Target Resource', 'Proposals', 'Configure', 'Review'];
 const STEPS_NO_TARGET   = ['Select Kind', 'Configure', 'Review'];
@@ -41,6 +41,7 @@ interface MetricWizardProps {
 }
 
 export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
+  const theme = useTheme();
   const [kind, setKind] = useState<MetricKind>((initialKind as MetricKind) ?? 'Metric');
   const [gvk, setGvk] = useState<SelectedGVK | null>(null);
   const [federatedAccessRef, setFederatedAccessRef] = useState('');
@@ -160,7 +161,7 @@ export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
 
       {/* Navigation — hide on Proposals step (it has its own buttons) and Review */}
       {steps[step] !== 'Proposals' && steps[step] !== 'Review' && (
-        <Box display="flex" justifyContent="space-between" style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid #e0e0e0' }}>
+        <Box display="flex" justifyContent="space-between" style={{ marginTop: 24, paddingTop: 16, borderTop: `1px solid ${theme.palette.divider}` }}>
           <Button onClick={back} disabled={step === 0} variant="outlined">Back</Button>
           <Button onClick={next} variant="contained" disabled={!canNext()}>
             {step === steps.length - 2 ? 'Review' : 'Next'}

@@ -4,10 +4,11 @@ import { GVKChip } from '../common/GVKChip';
 import { ConditionsTable } from '../common/ConditionsTable';
 import { YamlEditor } from '../common/YamlEditor';
 
-const { Box, Typography, Tabs, Tab, Chip } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Tabs, Tab, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { NameValueTable } = (window as any).pluginLib?.CommonComponents ?? {};
 
 export function ManagedMetricDetail({ item }: { item: any }) {
+  const theme = useTheme();
   const [tab, setTab] = useState(0);
   const dimensions: any[] = item.spec?.dimensions ?? [];
   const obs = item.status?.observation ?? {};
@@ -19,7 +20,7 @@ export function ManagedMetricDetail({ item }: { item: any }) {
         {item.metadata?.namespace} · metrics.openmcp.cloud/v1alpha1 · ManagedMetric
       </Typography>
 
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: '1px solid #e0e0e0' }}>
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: `1px solid ${theme.palette.divider}` }}>
         <Tab label="Overview" style={{ fontSize: 12 }} />
         {dimensions.length > 0 && <Tab label={`Dimensions (${dimensions.length})`} style={{ fontSize: 12 }} />}
         <Tab label="Conditions" style={{ fontSize: 12 }} />
@@ -44,7 +45,7 @@ export function ManagedMetricDetail({ item }: { item: any }) {
           </Box>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
+              <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
                 <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Name</th>
                 <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Field Path</th>
                 <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Type</th>
@@ -53,11 +54,11 @@ export function ManagedMetricDetail({ item }: { item: any }) {
             </thead>
             <tbody>
               {dimensions.map((d: any, i: number) => (
-                <tr key={i} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                <tr key={i} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
                   <td style={{ padding: '6px 10px', fontFamily: 'monospace', fontSize: 11, fontWeight: 600 }}>{d.name}</td>
                   <td style={{ padding: '6px 10px', fontFamily: 'monospace', fontSize: 11, color: '#1565c0' }}>{d.fieldPath}</td>
                   <td style={{ padding: '6px 10px', fontSize: 11 }}>{d.type ?? 'primitive'}</td>
-                  <td style={{ padding: '6px 10px', fontSize: 11, color: '#888' }}>{d.default != null ? JSON.stringify(d.default) : '—'}</td>
+                  <td style={{ padding: '6px 10px', fontSize: 11, color: theme.palette.text.secondary }}>{d.default != null ? JSON.stringify(d.default) : '—'}</td>
                 </tr>
               ))}
             </tbody>

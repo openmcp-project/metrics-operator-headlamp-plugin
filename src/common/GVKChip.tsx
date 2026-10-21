@@ -1,6 +1,8 @@
 import React from 'react';
 import { formatGVK } from './helpers';
 
+const { useTheme } = (window as any).pluginLib?.MuiCore ?? {};
+
 interface GVKChipProps {
   group: string;
   version: string;
@@ -9,8 +11,9 @@ interface GVKChipProps {
 }
 
 export function GVKChip({ group, version, kind, style }: GVKChipProps) {
+  const theme = useTheme();
   const text = formatGVK(group, version, kind);
-  if (text === '—') return <span style={{ color: '#888' }}>—</span>;
+  if (text === '—') return <span style={{ color: theme.palette.text.secondary }}>—</span>;
 
   return (
     <span style={{

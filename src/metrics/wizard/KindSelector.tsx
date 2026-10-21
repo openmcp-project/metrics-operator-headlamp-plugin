@@ -1,7 +1,7 @@
 import React from 'react';
 import { moColors } from '../../common/colors';
 
-const { Box, Typography, Radio, RadioGroup, FormControlLabel } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Radio, RadioGroup, FormControlLabel, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 export type MetricKind = 'Metric' | 'ManagedMetric' | 'FederatedMetric' | 'FederatedManagedMetric';
 
@@ -16,15 +16,16 @@ interface KindCardProps {
 }
 
 function KindCard({ kind, selected, onSelect, title, description, features, color }: KindCardProps) {
+  const theme = useTheme();
   return (
     <Box
       onClick={onSelect}
       style={{
-        border: `2px solid ${selected ? color : '#e0e0e0'}`,
+        border: `2px solid ${selected ? color : theme.palette.divider}`,
         borderRadius: 8,
         padding: '14px 16px',
         cursor: 'pointer',
-        background: selected ? `rgba(${hexToRgb(color)}, 0.05)` : '#fff',
+        background: selected ? `rgba(${hexToRgb(color)}, 0.05)` : theme.palette.background.paper,
         transition: 'border-color 0.15s, background 0.15s',
         flex: 1,
         minWidth: 200,
@@ -54,7 +55,7 @@ function KindCard({ kind, selected, onSelect, title, description, features, colo
       <Typography variant="body2" color="textSecondary" style={{ fontSize: 12, marginBottom: 10 }}>
         {description}
       </Typography>
-      <ul style={{ margin: 0, paddingLeft: 16, fontSize: 11, color: '#555' }}>
+      <ul style={{ margin: 0, paddingLeft: 16, fontSize: 11, color: theme.palette.text.secondary }}>
         {features.map(f => <li key={f} style={{ marginBottom: 2 }}>{f}</li>)}
       </ul>
     </Box>

@@ -2,7 +2,7 @@ import React from 'react';
 import { getProposals, GENERIC_PROPOSALS, ProposalConfig } from './proposals';
 import type { SelectedGVK } from './ResourcePicker';
 
-const { Box, Typography, Button, Alert } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Button, Alert, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 interface Props {
   gvk: SelectedGVK;
@@ -11,13 +11,14 @@ interface Props {
 }
 
 function ProposalCard({ proposal, onSelect }: { proposal: ProposalConfig; onSelect: () => void }) {
+  const theme = useTheme();
   return (
     <Box
       style={{
-        border: '1px solid #e0e0e0',
+        border: `1px solid ${theme.palette.divider}`,
         borderRadius: 8,
         padding: '12px 16px',
-        background: '#fff',
+        background: theme.palette.background.paper,
         display: 'flex',
         flexDirection: 'column',
         gap: 6,
@@ -38,17 +39,17 @@ function ProposalCard({ proposal, onSelect }: { proposal: ProposalConfig; onSele
       )}
       <Box display="flex" style={{ gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
         {proposal.projections?.map(p => (
-          <Box key={p.name} style={{ background: '#f5f5f5', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
+          <Box key={p.name} style={{ background: theme.palette.background.default, borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
             dim: {p.name}
           </Box>
         ))}
         {proposal.valueFrom && (
-          <Box style={{ background: '#e8f5e9', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
+          <Box style={{ background: '#e8f5e9', color: '#1a1a1a', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
             valueFrom: {proposal.valueFrom.fieldPath}
           </Box>
         )}
         {proposal.interval && (
-          <Box style={{ background: '#e3f2fd', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
+          <Box style={{ background: '#e3f2fd', color: '#1a1a1a', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
             interval: {proposal.interval}
           </Box>
         )}
@@ -61,6 +62,7 @@ function ProposalCard({ proposal, onSelect }: { proposal: ProposalConfig; onSele
 }
 
 export function SmartProposals({ gvk, onSelect, onSkip }: Props) {
+  const theme = useTheme();
   const specific = getProposals(gvk.group, gvk.version, gvk.kind);
   const proposals = specific.length > 0 ? specific : GENERIC_PROPOSALS;
   const isGeneric = specific.length === 0;
@@ -80,7 +82,7 @@ export function SmartProposals({ gvk, onSelect, onSkip }: Props) {
         ))}
       </Box>
 
-      <Box style={{ borderTop: '1px solid #e0e0e0', paddingTop: 14 }}>
+      <Box style={{ borderTop: `1px solid ${theme.palette.divider}`, paddingTop: 14 }}>
         <Button variant="outlined" onClick={onSkip}>
           Custom / Start from scratch
         </Button>

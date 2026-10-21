@@ -5,7 +5,7 @@ import { ConditionsTable } from '../common/ConditionsTable';
 import { YamlEditor } from '../common/YamlEditor';
 import { moColors } from '../common/colors';
 
-const { Box, Typography, Tabs, Tab, Chip } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Tabs, Tab, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { NameValueTable } = (window as any).pluginLib?.CommonComponents ?? {};
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 }
 
 export function FederatedMetricDetail({ item, kind }: Props) {
+  const theme = useTheme();
   const [tab, setTab] = useState(0);
   const projections: any[] = item.spec?.projections ?? [];
   const obs = item.status?.observation ?? {};
@@ -32,7 +33,7 @@ export function FederatedMetricDetail({ item, kind }: Props) {
         </Box>
       )}
 
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: '1px solid #e0e0e0' }}>
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: `1px solid ${theme.palette.divider}` }}>
         <Tab label="Overview" style={{ fontSize: 12 }} />
         {projections.length > 0 && <Tab label={`Projections (${projections.length})`} style={{ fontSize: 12 }} />}
         <Tab label="Conditions" style={{ fontSize: 12 }} />
@@ -55,7 +56,7 @@ export function FederatedMetricDetail({ item, kind }: Props) {
               { label: 'Failed', value: obs.failedCount ?? 0, color: moColors.failed.bg },
               { label: 'Pending', value: obs.pendingCount ?? 0, color: moColors.pending.bg },
             ].map(({ label, value, color }) => (
-              <Box key={label} style={{ textAlign: 'center', background: '#fff', border: `2px solid ${color}`, borderRadius: 8, padding: '12px 24px', minWidth: 80 }}>
+              <Box key={label} style={{ textAlign: 'center', background: theme.palette.background.paper, border: `2px solid ${color}`, borderRadius: 8, padding: '12px 24px', minWidth: 80 }}>
                 <Typography variant="h4" style={{ fontWeight: 700, color, lineHeight: 1 }}>{value}</Typography>
                 <Typography variant="caption" color="textSecondary" style={{ fontSize: 10 }}>{label}</Typography>
               </Box>
@@ -67,7 +68,7 @@ export function FederatedMetricDetail({ item, kind }: Props) {
       {tab === 1 && projections.length > 0 && (
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
+            <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
               <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Name</th>
               <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Field Path</th>
               <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Type</th>
@@ -76,11 +77,11 @@ export function FederatedMetricDetail({ item, kind }: Props) {
           </thead>
           <tbody>
             {projections.map((p: any, i: number) => (
-              <tr key={i} style={{ borderBottom: '1px solid #f0f0f0' }}>
+              <tr key={i} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
                 <td style={{ padding: '6px 10px', fontFamily: 'monospace', fontSize: 11, fontWeight: 600 }}>{p.name}</td>
                 <td style={{ padding: '6px 10px', fontFamily: 'monospace', fontSize: 11, color: '#1565c0' }}>{p.fieldPath}</td>
                 <td style={{ padding: '6px 10px', fontSize: 11 }}>{p.type ?? 'primitive'}</td>
-                <td style={{ padding: '6px 10px', fontSize: 11, color: '#888' }}>{p.default != null ? JSON.stringify(p.default) : '—'}</td>
+                <td style={{ padding: '6px 10px', fontSize: 11, color: theme.palette.text.secondary }}>{p.default != null ? JSON.stringify(p.default) : '—'}</td>
               </tr>
             ))}
           </tbody>

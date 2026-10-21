@@ -6,13 +6,14 @@ import { ConditionsBadge } from '../common/ConditionsTable';
 import { formatAge } from '../common/helpers';
 import { ManagedMetricDetail } from './ManagedMetricDetail';
 
-const { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip } =
+const { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
 
 const TH: React.CSSProperties = { padding: '8px 12px', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap' };
 const TD: React.CSSProperties = { padding: '8px 12px', fontSize: 12, verticalAlign: 'middle' };
 
 export default function ManagedMetricList() {
+  const theme = useTheme();
   const [managed] = ManagedMetric.useList() as [any[], any];
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -55,7 +56,7 @@ export default function ManagedMetricList() {
 
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
-          <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
+          <tr style={{ borderBottom: `2px solid ${theme.palette.divider}`, textAlign: 'left', background: theme.palette.background.default }}>
             <th style={TH}>Name</th>
             <th style={TH}>Namespace</th>
             <th style={TH}>Target GVK</th>
@@ -70,10 +71,10 @@ export default function ManagedMetricList() {
         <tbody>
           {filtered.map((item: any) => (
             <tr key={`${item.metadata?.namespace}/${item.metadata?.name}`}
-              style={{ borderBottom: '1px solid #f0f0f0', cursor: 'pointer' }}
+              style={{ borderBottom: `1px solid ${theme.palette.divider}`, cursor: 'pointer' }}
               onClick={() => launchDetail(item)}>
               <td style={{ ...TD, fontWeight: 600, color: '#1565c0' }}>{item.metadata?.name}</td>
-              <td style={{ ...TD, color: '#555' }}>{item.metadata?.namespace}</td>
+              <td style={{ ...TD, color: theme.palette.text.secondary }}>{item.metadata?.namespace}</td>
               <td style={TD}><GVKChip group={item.spec?.target?.group ?? ''} version={item.spec?.target?.version ?? ''} kind={item.spec?.target?.kind ?? ''} /></td>
               <td style={TD}><StatusBadge ready={item.status?.ready ?? 'Unknown'} /></td>
               <td style={{ ...TD, fontFamily: 'monospace' }}>{item.spec?.interval ?? '—'}</td>
@@ -81,11 +82,11 @@ export default function ManagedMetricList() {
                 {item.status?.observation?.resources != null ? item.status.observation.resources : '—'}
               </td>
               <td style={TD}>{item.spec?.dataSinkRef?.name ? <Chip label={item.spec.dataSinkRef.name} size="small" style={{ fontSize: 10, height: 18 }} /> : '—'}</td>
-              <td style={{ ...TD, color: '#888' }}>{formatAge(item.status?.observation?.timestamp)}</td>
+              <td style={{ ...TD, color: theme.palette.text.secondary }}>{formatAge(item.status?.observation?.timestamp)}</td>
               <td style={TD} onClick={e => e.stopPropagation()}><ConditionsBadge conditions={item.status?.conditions ?? []} /></td>
             </tr>
           ))}
-          {filtered.length === 0 && <tr><td colSpan={9} style={{ padding: 32, textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No managed metrics found.</td></tr>}
+          {filtered.length === 0 && <tr><td colSpan={9} style={{ padding: 32, textAlign: 'center', color: theme.palette.text.secondary, fontStyle: 'italic' }}>No managed metrics found.</td></tr>}
         </tbody>
       </table>
     </Box>

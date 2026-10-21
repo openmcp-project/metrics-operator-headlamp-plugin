@@ -9,7 +9,7 @@ import type { DimensionConfig, ValueFromConfig } from './proposals';
 const {
   Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem,
   Button, IconButton, Accordion, AccordionSummary, AccordionDetails,
-  Alert, Chip, Tooltip,
+  Alert, Chip, Tooltip, useTheme,
 } = (window as any).pluginLib?.MuiCore ?? {};
 
 export interface MetricFormValues {
@@ -67,6 +67,7 @@ function KeyValueEditor({ label, value, onChange }: { label: string; value: Reco
 }
 
 function FieldPathInput({ value, onChange, suggestions }: { value: string; onChange: (v: string) => void; suggestions: FieldSuggestion[] }) {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const filtered = value ? suggestions.filter(s => s.path.toLowerCase().includes(value.toLowerCase())).slice(0, 8) : [];
 
@@ -85,7 +86,7 @@ function FieldPathInput({ value, onChange, suggestions }: { value: string; onCha
       {open && filtered.length > 0 && (
         <Box style={{
           position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100,
-          background: '#fff', border: '1px solid #e0e0e0', borderRadius: 4,
+          background: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 4,
           boxShadow: '0 4px 12px rgba(0,0,0,0.12)', maxHeight: 200, overflowY: 'auto',
         }}>
           {filtered.map(s => (
@@ -93,10 +94,10 @@ function FieldPathInput({ value, onChange, suggestions }: { value: string; onCha
               key={s.path}
               onMouseDown={() => { onChange(s.path); setOpen(false); }}
               style={{ padding: '6px 12px', cursor: 'pointer', fontSize: 12, fontFamily: 'monospace' }}
-              onMouseEnter={(e: any) => e.currentTarget.style.background = '#f5f5f5'}
+              onMouseEnter={(e: any) => e.currentTarget.style.background = theme.palette.action.hover}
               onMouseLeave={(e: any) => e.currentTarget.style.background = ''}>
               <span style={{ fontWeight: 600 }}>{s.path}</span>
-              <span style={{ color: '#888', marginLeft: 8, fontSize: 11 }}>{s.type}</span>
+              <span style={{ color: theme.palette.text.secondary, marginLeft: 8, fontSize: 11 }}>{s.type}</span>
             </Box>
           ))}
         </Box>
@@ -111,6 +112,7 @@ function DimensionsEditor({ value, onChange, suggestions, label = 'Projections /
   suggestions: FieldSuggestion[];
   label?: string;
 }) {
+  const theme = useTheme();
   const hasHighCard = value.some(d => d.type === 'map' || d.type === 'slice');
 
   function update(idx: number, patch: Partial<DimensionConfig>) {
@@ -138,7 +140,7 @@ function DimensionsEditor({ value, onChange, suggestions, label = 'Projections /
         <Typography variant="caption" color="textSecondary" style={{ fontSize: 11, fontStyle: 'italic' }}>No dimensions defined — the metric will count resources without extra labels.</Typography>
       )}
       {value.map((dim, i) => (
-        <Box key={i} style={{ border: '1px solid #e0e0e0', borderRadius: 6, padding: '10px 12px', marginBottom: 8, background: '#fafafa' }}>
+        <Box key={i} style={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 6, padding: '10px 12px', marginBottom: 8, background: theme.palette.background.default }}>
           <Box display="flex" style={{ gap: 8, marginBottom: 8, alignItems: 'flex-start' }}>
             <TextField size="small" placeholder="name" label="Name" value={dim.name}
               onChange={(e: any) => update(i, { name: e.target.value })} style={{ flex: 1 }} />
@@ -224,6 +226,7 @@ function ValueFromEditor({ value, onChange, suggestions }: { value: ValueFromCon
 }
 
 export function MetricForm({ kind, gvk, value, onChange }: Props) {
+  const theme = useTheme();
   const [dataSinks] = (DataSink as any).useList() as [any[], any];
   const [remoteAccesses] = (RemoteClusterAccess as any).useList() as [any[], any];
   const [schemaSuggestions, setSchemaSuggestions] = useState<FieldSuggestion[]>([]);
@@ -308,7 +311,7 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
       {kind === 'ManagedMetric' && (
         <Accordion defaultExpanded={value.projections.length > 0}>
           <AccordionSummary>
-            <Typography variant="subtitle2">Custom Dimensions <span style={{ fontSize: 11, color: '#888', fontWeight: 400 }}>(overrides auto-derived Ready/Synced)</span></Typography>
+            <Typography variant="subtitle2">Custom Dimensions <span style={{ fontSize: 11, color: theme.palette.text.secondary, fontWeight: 400 }}>(overrides auto-derived Ready/Synced)</span></Typography>
           </AccordionSummary>
           <AccordionDetails>
             <DimensionsEditor value={value.projections} onChange={v => set('projections', v)} suggestions={schemaSuggestions} label="Dimensions" />

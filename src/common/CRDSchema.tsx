@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as jsYaml from 'js-yaml';
 
-const { Typography, Box } = (window as any).pluginLib?.MuiCore ?? {};
+const { Typography, Box, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 // ── Type chip ─────────────────────────────────────────────────────────────────
 
@@ -26,6 +26,7 @@ export function SchemaPropertyTree({ schema, required = [], depth = 0 }: {
   required?: string[];
   depth?: number;
 }) {
+  const theme = useTheme();
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   if (!schema?.properties) {
@@ -63,7 +64,7 @@ export function SchemaPropertyTree({ schema, required = [], depth = 0 }: {
               }}
             >
               {hasChildren ? (
-                <span style={{ fontSize: 10, color: '#888', marginTop: 3, userSelect: 'none', width: 10 }}>
+                <span style={{ fontSize: 10, color: theme.palette.text.secondary, marginTop: 3, userSelect: 'none', width: 10 }}>
                   {isCollapsed ? '▸' : '▾'}
                 </span>
               ) : (
@@ -72,7 +73,7 @@ export function SchemaPropertyTree({ schema, required = [], depth = 0 }: {
               <span style={{ fontWeight: 600, fontFamily: 'monospace', fontSize: 13 }}>{name}</span>
               <TypeChip type={type} />
               {arrayItemType && (
-                <span style={{ fontSize: 10, color: '#888', marginTop: 2 }}>of {arrayItemType}</span>
+                <span style={{ fontSize: 10, color: theme.palette.text.secondary, marginTop: 2 }}>of {arrayItemType}</span>
               )}
               {isRequired && (
                 <span style={{
@@ -88,7 +89,7 @@ export function SchemaPropertyTree({ schema, required = [], depth = 0 }: {
               )}
             </Box>
             {hasChildren && !isCollapsed && (
-              <Box style={{ marginTop: 4, paddingLeft: 16, borderLeft: '2px solid #e0e0e0' }}>
+              <Box style={{ marginTop: 4, paddingLeft: 16, borderLeft: `2px solid ${theme.palette.divider}` }}>
                 <SchemaPropertyTree
                   schema={propSchema}
                   required={propSchema.required ?? []}

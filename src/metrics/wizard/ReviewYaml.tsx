@@ -5,7 +5,7 @@ import type { MetricKind } from './KindSelector';
 import type { SelectedGVK } from './ResourcePicker';
 import type { MetricFormValues } from './MetricForm';
 
-const { Box, Typography, Alert, CircularProgress, Button } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Alert, CircularProgress, Button, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 interface Props {
   kind: MetricKind;
@@ -108,6 +108,7 @@ function pluralFor(kind: MetricKind): string {
 }
 
 export function ReviewYaml({ kind, gvk, form, federatedAccessRef, onSuccess }: Props) {
+  const theme = useTheme();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const manifest = buildManifest(kind, gvk, form, federatedAccessRef);
@@ -139,7 +140,7 @@ export function ReviewYaml({ kind, gvk, form, federatedAccessRef, onSuccess }: P
 
       {error && <Alert severity="error" style={{ marginBottom: 12 }}>{error}</Alert>}
 
-      <Box style={{ height: 400, border: '1px solid #e0e0e0', borderRadius: 6, overflow: 'hidden' }}>
+      <Box style={{ height: 400, border: `1px solid ${theme.palette.divider}`, borderRadius: 6, overflow: 'hidden' }}>
         <YamlEditor item={manifest} onSave={async () => {}} readOnly={false} initialStage="edit" />
       </Box>
 
