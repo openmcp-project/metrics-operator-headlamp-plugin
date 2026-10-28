@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
   plugins: [react()],
@@ -10,7 +11,9 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     exclude: ['e2e/**', 'node_modules/**'],
     alias: {
-      '@kinvolk/headlamp-plugin/lib': '/Users/D056754/Documents/Repos/SAP/metrics-operator-headlamp-plugin/src/test/__mocks__/headlamp-plugin.ts',
+      '@kinvolk/headlamp-plugin/lib': fileURLToPath(
+        new URL('./src/test/__mocks__/headlamp-plugin.ts', import.meta.url),
+      ),
     },
     coverage: {
       provider: 'v8',

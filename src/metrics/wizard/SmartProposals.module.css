@@ -1,0 +1,63 @@
+.card {
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardTitle {
+  font-weight: 700;
+}
+
+.cardDescription {
+  font-size: 12px;
+  flex: 1;
+}
+
+.cardAlert {
+  font-size: 11px;
+  padding: 4px 10px;
+}
+
+.pillRow {
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.pill {
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 10px;
+  font-family: monospace;
+}
+
+.useButton {
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+.title {
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  margin-bottom: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.skipSection {
+  padding-top: 14px;
+}
+
+.skipHint {
+  display: block;
+  margin-top: 6px;
+}

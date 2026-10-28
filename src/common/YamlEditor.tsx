@@ -3,7 +3,7 @@ import Editor, { DiffEditor } from '@monaco-editor/react';
 import { configureMonacoYaml } from 'monaco-yaml';
 import * as jsYaml from 'js-yaml';
 
-const { Box, Button, Alert, Typography, Chip } =
+const { Box, Button, Alert, Typography, Chip, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
 
 // ── YAML language server (module-level singleton) ─────────────────────────────
@@ -121,8 +121,8 @@ export function YamlEditor({ item, onSave, readOnly = false, initialStage, schem
   }, [item]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isDirty = value !== originalYaml;
-  const isDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-  const theme = isDark ? 'vs-dark' : 'vs';
+  const muiTheme = useTheme();
+  const editorTheme = muiTheme.palette.mode === 'dark' ? 'vs-dark' : 'vs';
 
   function handleBeforeMount(monaco: any) {
     // Initialize the YAML language server (no-op after first call)
@@ -199,7 +199,7 @@ export function YamlEditor({ item, onSave, readOnly = false, initialStage, schem
         {stage === 'edit' && (
           <>
             <Button size="small" variant="text" onClick={handleFormat}
-              style={{ fontSize: 12, padding: '3px 10px', color: '#555' }}>
+              style={{ fontSize: 12, padding: '3px 10px', color: muiTheme.palette.text.secondary }}>
               Format
             </Button>
             <Button size="small" variant="outlined" onClick={handleDiscard}
@@ -255,7 +255,7 @@ export function YamlEditor({ item, onSave, readOnly = false, initialStage, schem
             language="yaml"
             original={originalYaml}
             modified={value}
-            theme={theme}
+            theme={editorTheme}
             options={DIFF_OPTIONS}
             beforeMount={handleBeforeMount}
           />
@@ -264,7 +264,7 @@ export function YamlEditor({ item, onSave, readOnly = false, initialStage, schem
             height="100%"
             defaultLanguage="yaml"
             value={value}
-            theme={theme}
+            theme={editorTheme}
             path={editorPath.current}
             options={{ ...EDITOR_OPTIONS, readOnly: stage === 'view' }}
             onChange={(v) => setValue(v ?? '')}

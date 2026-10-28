@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import * as jsYaml from 'js-yaml';
+import styles from './CRDSchema.module.css';
 
-const { Typography, Box } = (window as any).pluginLib?.MuiCore ?? {};
+const { Typography, Box, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 // ── Type chip ─────────────────────────────────────────────────────────────────
 
@@ -11,11 +12,7 @@ export function TypeChip({ type }: { type: string }) {
     boolean: '#e65100', object: '#2e7d32', array: '#00695c',
   };
   return (
-    <span style={{
-      display: 'inline-block', padding: '1px 7px', borderRadius: 4, fontSize: 10,
-      fontWeight: 700, background: colors[type] ?? '#616161', color: '#fff',
-      fontFamily: 'monospace', marginLeft: 6,
-    }}>{type}</span>
+    <span className={styles.typeChip} style={{ background: colors[type] ?? '#616161', color: '#fff' }}>{type}</span>
   );
 }
 
@@ -26,11 +23,12 @@ export function SchemaPropertyTree({ schema, required = [], depth = 0 }: {
   required?: string[];
   depth?: number;
 }) {
+  const theme = useTheme();
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   if (!schema?.properties) {
     return (
-      <Typography variant="body2" color="textSecondary" style={{ padding: '4px 0', fontStyle: 'italic' }}>
+      <Typography variant="body2" color="textSecondary" className={styles.empty}>
         No properties defined.
       </Typography>
     );
@@ -49,10 +47,11 @@ export function SchemaPropertyTree({ schema, required = [], depth = 0 }: {
           type === 'array' && propSchema.items?.type ? propSchema.items.type : null;
 
         return (
-          <Box key={name} style={{ marginBottom: 6 }}>
+          <Box key={name} className={styles.row}>
             <Box
               display="flex" alignItems="flex-start"
-              style={{ gap: 6, cursor: hasChildren ? 'pointer' : 'default' }}
+              className={styles.rowHeader}
+              style={{ cursor: hasChildren ? 'pointer' : 'default' }}
               onClick={() => {
                 if (!hasChildren) return;
                 setCollapsed((prev) => {
@@ -63,32 +62,29 @@ export function SchemaPropertyTree({ schema, required = [], depth = 0 }: {
               }}
             >
               {hasChildren ? (
-                <span style={{ fontSize: 10, color: '#888', marginTop: 3, userSelect: 'none', width: 10 }}>
+                <span className={styles.caret} style={{ color: theme.palette.text.secondary }}>
                   {isCollapsed ? '▸' : '▾'}
                 </span>
               ) : (
-                <span style={{ display: 'inline-block', width: 10 }} />
+                <span className={styles.caretSpacer} />
               )}
-              <span style={{ fontWeight: 600, fontFamily: 'monospace', fontSize: 13 }}>{name}</span>
+              <span className={styles.propName}>{name}</span>
               <TypeChip type={type} />
               {arrayItemType && (
-                <span style={{ fontSize: 10, color: '#888', marginTop: 2 }}>of {arrayItemType}</span>
+                <span className={styles.arrayItem} style={{ color: theme.palette.text.secondary }}>of {arrayItemType}</span>
               )}
               {isRequired && (
-                <span style={{
-                  fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 3,
-                  background: '#c62828', color: '#fff', marginLeft: 2, marginTop: 1,
-                }}>required</span>
+                <span className={styles.requiredChip} style={{ background: '#c62828', color: '#fff' }}>required</span>
               )}
               {propSchema.description && (
                 <Typography variant="caption" color="textSecondary"
-                  style={{ fontSize: 11, marginTop: 1, flex: 1, lineHeight: 1.4 }}>
+                  className={styles.description}>
                   {propSchema.description}
                 </Typography>
               )}
             </Box>
             {hasChildren && !isCollapsed && (
-              <Box style={{ marginTop: 4, paddingLeft: 16, borderLeft: '2px solid #e0e0e0' }}>
+              <Box className={styles.children} style={{ borderLeft: `2px solid ${theme.palette.divider}` }}>
                 <SchemaPropertyTree
                   schema={propSchema}
                   required={propSchema.required ?? []}

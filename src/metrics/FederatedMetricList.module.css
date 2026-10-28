@@ -1,0 +1,61 @@
+.banner {
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 12px;
+}
+
+.filterBar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.search {
+  min-width: 180px;
+}
+
+.filterNarrow {
+  min-width: 130px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerRow {
+  text-align: left;
+}
+
+.th {
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.td {
+  padding: 8px 12px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.row {
+  cursor: pointer;
+}
+
+.nameCell {
+  font-weight: 600;
+}
+
+.zeroCount {
+  font-size: 12px;
+}
+
+.emptyCell {
+  padding: 32px;
+  text-align: center;
+  font-style: italic;
+}

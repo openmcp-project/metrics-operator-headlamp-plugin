@@ -1,0 +1,85 @@
+.yamlStage {
+  height: 500px;
+}
+
+.yamlHeader {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.root {
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.errorAlert {
+  margin-bottom: 16px;
+}
+
+.nameRow {
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.nameField {
+  flex: 1;
+  min-width: 200px;
+}
+
+.namespaceField {
+  flex: 1;
+  min-width: 180px;
+}
+
+.endpointField {
+  margin-bottom: 16px;
+}
+
+.divider {
+  margin-bottom: 16px;
+}
+
+.authControl {
+  margin-bottom: 16px;
+}
+
+.authLegend {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.authRow {
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.certColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.certRow {
+  gap: 12px;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.flex2 {
+  flex: 2;
+}
+
+.footer {
+  gap: 8px;
+  margin-top: 8px;
+}

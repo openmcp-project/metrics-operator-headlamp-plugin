@@ -1,0 +1,8 @@
+.chip {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}

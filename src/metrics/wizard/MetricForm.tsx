@@ -5,11 +5,12 @@ import { fetchCRDSchema, extractFieldPaths, FieldSuggestion } from './schemaHelp
 import type { MetricKind } from './KindSelector';
 import type { SelectedGVK } from './ResourcePicker';
 import type { DimensionConfig, ValueFromConfig } from './proposals';
+import styles from './MetricForm.module.css';
 
 const {
   Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem,
   Button, IconButton, Accordion, AccordionSummary, AccordionDetails,
-  Alert, Chip, Tooltip,
+  Alert, Chip, Tooltip, useTheme,
 } = (window as any).pluginLib?.MuiCore ?? {};
 
 export interface MetricFormValues {
@@ -51,15 +52,15 @@ function KeyValueEditor({ label, value, onChange }: { label: string; value: Reco
 
   return (
     <Box>
-      <Typography variant="caption" style={{ fontWeight: 600, marginBottom: 4, display: 'block' }}>{label}</Typography>
+      <Typography variant="caption" className={styles.kvLabel}>{label}</Typography>
       {pairs.map(([k, v], i) => (
-        <Box key={i} display="flex" style={{ gap: 8, marginBottom: 6, alignItems: 'center' }}>
-          <TextField size="small" placeholder="key" value={k} onChange={(e: any) => update(i, e.target.value, v)} style={{ flex: 1 }} />
-          <TextField size="small" placeholder="value" value={v} onChange={(e: any) => update(i, k, e.target.value)} style={{ flex: 1 }} />
+        <Box key={i} display="flex" className={styles.kvRow}>
+          <TextField size="small" placeholder="key" value={k} onChange={(e: any) => update(i, e.target.value, v)} className={styles.flex1} />
+          <TextField size="small" placeholder="value" value={v} onChange={(e: any) => update(i, k, e.target.value)} className={styles.flex1} />
           <IconButton size="small" onClick={() => remove(i)} style={{ color: '#c62828' }}>✕</IconButton>
         </Box>
       ))}
-      <Button size="small" variant="outlined" onClick={() => onChange({ ...value, '': '' })} style={{ fontSize: 11, marginTop: 2 }}>
+      <Button size="small" variant="outlined" onClick={() => onChange({ ...value, '': '' })} className={styles.addButton}>
         + Add
       </Button>
     </Box>
@@ -67,11 +68,12 @@ function KeyValueEditor({ label, value, onChange }: { label: string; value: Reco
 }
 
 function FieldPathInput({ value, onChange, suggestions }: { value: string; onChange: (v: string) => void; suggestions: FieldSuggestion[] }) {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const filtered = value ? suggestions.filter(s => s.path.toLowerCase().includes(value.toLowerCase())).slice(0, 8) : [];
 
   return (
-    <Box style={{ position: 'relative' }}>
+    <Box className={styles.fieldPathWrap}>
       <TextField
         size="small"
         fullWidth
@@ -80,23 +82,22 @@ function FieldPathInput({ value, onChange, suggestions }: { value: string; onCha
         onChange={(e: any) => { onChange(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 200)}
-        style={{ fontFamily: 'monospace' }}
+        className={styles.fieldPathInput}
       />
       {open && filtered.length > 0 && (
-        <Box style={{
-          position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100,
-          background: '#fff', border: '1px solid #e0e0e0', borderRadius: 4,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.12)', maxHeight: 200, overflowY: 'auto',
+        <Box className={styles.dropdown} style={{
+          background: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
         }}>
           {filtered.map(s => (
             <Box
               key={s.path}
               onMouseDown={() => { onChange(s.path); setOpen(false); }}
-              style={{ padding: '6px 12px', cursor: 'pointer', fontSize: 12, fontFamily: 'monospace' }}
-              onMouseEnter={(e: any) => e.currentTarget.style.background = '#f5f5f5'}
+              className={styles.dropdownItem}
+              onMouseEnter={(e: any) => e.currentTarget.style.background = theme.palette.action.hover}
               onMouseLeave={(e: any) => e.currentTarget.style.background = ''}>
-              <span style={{ fontWeight: 600 }}>{s.path}</span>
-              <span style={{ color: '#888', marginLeft: 8, fontSize: 11 }}>{s.type}</span>
+              <span className={styles.dropdownPath}>{s.path}</span>
+              <span className={styles.dropdownType} style={{ color: theme.palette.text.secondary }}>{s.type}</span>
             </Box>
           ))}
         </Box>
@@ -111,6 +112,7 @@ function DimensionsEditor({ value, onChange, suggestions, label = 'Projections /
   suggestions: FieldSuggestion[];
   label?: string;
 }) {
+  const theme = useTheme();
   const hasHighCard = value.some(d => d.type === 'map' || d.type === 'slice');
 
   function update(idx: number, patch: Partial<DimensionConfig>) {
@@ -128,25 +130,25 @@ function DimensionsEditor({ value, onChange, suggestions, label = 'Projections /
 
   return (
     <Box>
-      <Typography variant="caption" style={{ fontWeight: 600, marginBottom: 4, display: 'block' }}>{label}</Typography>
+      <Typography variant="caption" className={styles.kvLabel}>{label}</Typography>
       {hasHighCard && (
-        <Alert severity="warning" style={{ fontSize: 11, marginBottom: 8, padding: '4px 10px' }}>
+        <Alert severity="warning" className={styles.cardWarning}>
           <strong>High cardinality warning:</strong> Dimensions of type <code>map</code> or <code>slice</code> export JSON strings and create one OTLP time series per unique value combination. Use these types only when cardinality is bounded.
         </Alert>
       )}
       {value.length === 0 && (
-        <Typography variant="caption" color="textSecondary" style={{ fontSize: 11, fontStyle: 'italic' }}>No dimensions defined — the metric will count resources without extra labels.</Typography>
+        <Typography variant="caption" color="textSecondary" className={styles.emptyHint}>No dimensions defined — the metric will count resources without extra labels.</Typography>
       )}
       {value.map((dim, i) => (
-        <Box key={i} style={{ border: '1px solid #e0e0e0', borderRadius: 6, padding: '10px 12px', marginBottom: 8, background: '#fafafa' }}>
-          <Box display="flex" style={{ gap: 8, marginBottom: 8, alignItems: 'flex-start' }}>
+        <Box key={i} className={styles.dimensionCard} style={{ border: `1px solid ${theme.palette.divider}`, background: theme.palette.background.default }}>
+          <Box display="flex" className={styles.dimensionRow}>
             <TextField size="small" placeholder="name" label="Name" value={dim.name}
-              onChange={(e: any) => update(i, { name: e.target.value })} style={{ flex: 1 }} />
-            <Box style={{ flex: 2 }}>
-              <Typography variant="caption" style={{ fontSize: 10, marginBottom: 2, display: 'block' }}>Field Path (JSONPath)</Typography>
+              onChange={(e: any) => update(i, { name: e.target.value })} className={styles.flex1} />
+            <Box className={styles.flex2}>
+              <Typography variant="caption" className={styles.subLabel}>Field Path (JSONPath)</Typography>
               <FieldPathInput value={dim.fieldPath} onChange={fp => update(i, { fieldPath: fp })} suggestions={suggestions} />
             </Box>
-            <FormControl size="small" style={{ minWidth: 110 }}>
+            <FormControl size="small" className={styles.typeControl}>
               <InputLabel>Type</InputLabel>
               <Select value={dim.type} label="Type" onChange={(e: any) => update(i, { type: e.target.value })}>
                 <MenuItem value="primitive">primitive</MenuItem>
@@ -155,14 +157,14 @@ function DimensionsEditor({ value, onChange, suggestions, label = 'Projections /
                 <MenuItem value="timestamp">timestamp</MenuItem>
               </Select>
             </FormControl>
-            <IconButton size="small" onClick={() => remove(i)} style={{ color: '#c62828', marginTop: 2 }}>✕</IconButton>
+            <IconButton size="small" onClick={() => remove(i)} className={styles.deleteButton} style={{ color: '#c62828' }}>✕</IconButton>
           </Box>
           {(dim.type === 'map' || dim.type === 'slice') && (
-            <Chip label="High cardinality" size="small" style={{ background: '#fff3e0', color: '#e65100', fontSize: 10, height: 18, marginBottom: 4 }} />
+            <Chip label="High cardinality" size="small" className={styles.highCardChip} style={{ background: '#fff3e0', color: '#e65100' }} />
           )}
         </Box>
       ))}
-      <Button size="small" variant="outlined" onClick={add} style={{ marginTop: 4, fontSize: 11 }}>+ Add dimension</Button>
+      <Button size="small" variant="outlined" onClick={add} className={styles.addDimensionButton}>+ Add dimension</Button>
     </Box>
   );
 }
@@ -184,21 +186,21 @@ function ValueFromEditor({ value, onChange, suggestions }: { value: ValueFromCon
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" style={{ gap: 10, marginBottom: enabled ? 12 : 0 }}>
-        <Typography variant="caption" style={{ fontWeight: 600 }}>Value Extraction (valueFrom)</Typography>
-        <Button size="small" variant={enabled ? 'outlined' : 'contained'} onClick={enabled ? disable : enable} style={{ fontSize: 11 }}>
+      <Box display="flex" alignItems="center" className={styles.valueFromHeader} style={{ marginBottom: enabled ? 12 : 0 }}>
+        <Typography variant="caption" className={styles.valueFromLabel}>Value Extraction (valueFrom)</Typography>
+        <Button size="small" variant={enabled ? 'outlined' : 'contained'} onClick={enabled ? disable : enable} className={styles.smallButton}>
           {enabled ? 'Disable' : 'Enable'}
         </Button>
       </Box>
       {!enabled && (
-        <Typography variant="caption" color="textSecondary" style={{ fontSize: 11 }}>
+        <Typography variant="caption" color="textSecondary" className={styles.hintText}>
           When disabled, the metric value is the count of matching resources. Enable to extract a numeric field from resources.
         </Typography>
       )}
       {enabled && value && (
-        <Box style={{ display: 'grid', gridTemplateColumns: '1fr 120px 120px', gap: 10 }}>
+        <Box className={styles.valueFromGrid}>
           <Box>
-            <Typography variant="caption" style={{ fontSize: 10, marginBottom: 2, display: 'block' }}>Field Path</Typography>
+            <Typography variant="caption" className={styles.subLabel}>Field Path</Typography>
             <FieldPathInput value={value.fieldPath} onChange={fp => update({ fieldPath: fp })} suggestions={suggestions} />
           </Box>
           <FormControl size="small">
@@ -224,6 +226,7 @@ function ValueFromEditor({ value, onChange, suggestions }: { value: ValueFromCon
 }
 
 export function MetricForm({ kind, gvk, value, onChange }: Props) {
+  const theme = useTheme();
   const [dataSinks] = (DataSink as any).useList() as [any[], any];
   const [remoteAccesses] = (RemoteClusterAccess as any).useList() as [any[], any];
   const [schemaSuggestions, setSchemaSuggestions] = useState<FieldSuggestion[]>([]);
@@ -245,15 +248,15 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
   const intervalError = value.interval && !isValidDuration(value.interval);
 
   return (
-    <Box style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+    <Box className={styles.root}>
       <Typography variant="h6">Configure metric</Typography>
 
       {/* Basic */}
-      <Box style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
+      <Box className={styles.basicGrid}>
         <TextField size="small" label="Name *" value={value.name} onChange={(e: any) => set('name', e.target.value)} />
         <TextField size="small" label="Namespace" value={value.namespace} onChange={(e: any) => set('namespace', e.target.value)} />
       </Box>
-      <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <Box className={styles.intervalGrid}>
         <TextField
           size="small"
           label="Interval *"
@@ -280,11 +283,11 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
           <Typography variant="subtitle2">Selectors</Typography>
           {(Object.keys(value.labelSelector).length > 0 || Object.keys(value.fieldSelector).length > 0) && (
             <Chip label={`${Object.keys(value.labelSelector).length + Object.keys(value.fieldSelector).length} active`}
-              size="small" style={{ marginLeft: 8, fontSize: 10, height: 18 }} />
+              size="small" className={styles.accordionChip} />
           )}
         </AccordionSummary>
         <AccordionDetails>
-          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <Box className={styles.selectorGrid}>
             <KeyValueEditor label="Label Selector" value={value.labelSelector} onChange={v => set('labelSelector', v)} />
             <KeyValueEditor label="Field Selector" value={value.fieldSelector} onChange={v => set('fieldSelector', v)} />
           </Box>
@@ -296,7 +299,7 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
         <Accordion defaultExpanded={value.projections.length > 0}>
           <AccordionSummary>
             <Typography variant="subtitle2">Projections / Dimensions</Typography>
-            {value.projections.length > 0 && <Chip label={value.projections.length} size="small" style={{ marginLeft: 8, fontSize: 10, height: 18 }} />}
+            {value.projections.length > 0 && <Chip label={value.projections.length} size="small" className={styles.accordionChip} />}
           </AccordionSummary>
           <AccordionDetails>
             <DimensionsEditor value={value.projections} onChange={v => set('projections', v)} suggestions={schemaSuggestions} />
@@ -308,7 +311,7 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
       {kind === 'ManagedMetric' && (
         <Accordion defaultExpanded={value.projections.length > 0}>
           <AccordionSummary>
-            <Typography variant="subtitle2">Custom Dimensions <span style={{ fontSize: 11, color: '#888', fontWeight: 400 }}>(overrides auto-derived Ready/Synced)</span></Typography>
+            <Typography variant="subtitle2">Custom Dimensions <span className={styles.customDimNote} style={{ color: theme.palette.text.secondary }}>(overrides auto-derived Ready/Synced)</span></Typography>
           </AccordionSummary>
           <AccordionDetails>
             <DimensionsEditor value={value.projections} onChange={v => set('projections', v)} suggestions={schemaSuggestions} label="Dimensions" />
@@ -321,7 +324,7 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
         <Accordion defaultExpanded={value.valueFrom !== null}>
           <AccordionSummary>
             <Typography variant="subtitle2">Value Extraction (valueFrom)</Typography>
-            {value.valueFrom && <Chip label="enabled" size="small" color="primary" style={{ marginLeft: 8, fontSize: 10, height: 18 }} />}
+            {value.valueFrom && <Chip label="enabled" size="small" color="primary" className={styles.accordionChip} />}
           </AccordionSummary>
           <AccordionDetails>
             <ValueFromEditor value={value.valueFrom} onChange={v => set('valueFrom', v)} suggestions={schemaSuggestions} />
@@ -336,7 +339,7 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
             <Typography variant="subtitle2">Remote Cluster (optional)</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <FormControl size="small" style={{ minWidth: 260 }}>
+            <FormControl size="small" className={styles.remoteControl}>
               <InputLabel>RemoteClusterAccess</InputLabel>
               <Select value={value.remoteClusterAccessRef} label="RemoteClusterAccess"
                 onChange={(e: any) => set('remoteClusterAccessRef', e.target.value)}>
@@ -346,7 +349,7 @@ export function MetricForm({ kind, gvk, value, onChange }: Props) {
                 ))}
               </Select>
             </FormControl>
-            <Typography variant="caption" color="textSecondary" style={{ display: 'block', marginTop: 6, fontSize: 11 }}>
+            <Typography variant="caption" color="textSecondary" className={styles.remoteHint}>
               When set, the operator collects this metric from the remote cluster instead of the local one.
             </Typography>
           </AccordionDetails>
