@@ -1,0 +1,174 @@
+.kvLabel {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.kvRow {
+  gap: 8px;
+  margin-bottom: 6px;
+  align-items: center;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.addButton {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.fieldPathWrap {
+  position: relative;
+}
+
+.fieldPathInput {
+  font-family: monospace;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.dropdownPath {
+  font-weight: 600;
+}
+
+.dropdownType {
+  margin-left: 8px;
+  font-size: 11px;
+}
+
+.cardWarning {
+  font-size: 11px;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+}
+
+.emptyHint {
+  font-size: 11px;
+  font-style: italic;
+}
+
+.dimensionCard {
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.dimensionRow {
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: flex-start;
+}
+
+.flex2 {
+  flex: 2;
+}
+
+.subLabel {
+  font-size: 10px;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.typeControl {
+  min-width: 110px;
+}
+
+.deleteButton {
+  margin-top: 2px;
+}
+
+.highCardChip {
+  font-size: 10px;
+  height: 18px;
+  margin-bottom: 4px;
+}
+
+.addDimensionButton {
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.valueFromHeader {
+  gap: 10px;
+}
+
+.valueFromLabel {
+  font-weight: 600;
+}
+
+.smallButton {
+  font-size: 11px;
+}
+
+.hintText {
+  font-size: 11px;
+}
+
+.valueFromGrid {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px;
+  gap: 10px;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.basicGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+
+.intervalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.accordionChip {
+  margin-left: 8px;
+  font-size: 10px;
+  height: 18px;
+}
+
+.selectorGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.customDimNote {
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.remoteControl {
+  min-width: 260px;
+}
+
+.remoteHint {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+}

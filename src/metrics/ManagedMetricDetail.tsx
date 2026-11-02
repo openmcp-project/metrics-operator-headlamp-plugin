@@ -3,11 +3,13 @@ import { StatusBadge } from '../common/StatusBadge';
 import { GVKChip } from '../common/GVKChip';
 import { ConditionsTable } from '../common/ConditionsTable';
 import { YamlEditor } from '../common/YamlEditor';
+import styles from './ManagedMetricDetail.module.css';
 
-const { Box, Typography, Tabs, Tab, Chip } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Tabs, Tab, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { NameValueTable } = (window as any).pluginLib?.CommonComponents ?? {};
 
 export function ManagedMetricDetail({ item }: { item: any }) {
+  const theme = useTheme();
   const [tab, setTab] = useState(0);
   const dimensions: any[] = item.spec?.dimensions ?? [];
   const obs = item.status?.observation ?? {};
@@ -19,11 +21,11 @@ export function ManagedMetricDetail({ item }: { item: any }) {
         {item.metadata?.namespace} · metrics.openmcp.cloud/v1alpha1 · ManagedMetric
       </Typography>
 
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: '1px solid #e0e0e0' }}>
-        <Tab label="Overview" style={{ fontSize: 12 }} />
-        {dimensions.length > 0 && <Tab label={`Dimensions (${dimensions.length})`} style={{ fontSize: 12 }} />}
-        <Tab label="Conditions" style={{ fontSize: 12 }} />
-        <Tab label="YAML" style={{ fontSize: 12 }} />
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} className={styles.tabs} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+        <Tab label="Overview" className={styles.tab} />
+        {dimensions.length > 0 && <Tab label={`Dimensions (${dimensions.length})`} className={styles.tab} />}
+        <Tab label="Conditions" className={styles.tab} />
+        <Tab label="YAML" className={styles.tab} />
       </Tabs>
 
       {tab === 0 && (
@@ -39,25 +41,25 @@ export function ManagedMetricDetail({ item }: { item: any }) {
 
       {tab === 1 && dimensions.length > 0 && (
         <Box>
-          <Box style={{ padding: '8px 12px', background: 'rgba(21,101,192,0.06)', borderRadius: 6, marginBottom: 12, fontSize: 12, color: '#555' }}>
+          <Box className={styles.infoBanner} style={{ background: 'rgba(21,101,192,0.06)', color: theme.palette.text.secondary }}>
             Custom dimensions override the auto-derived Ready/Synced defaults. Only the listed dimensions are exported.
           </Box>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table className={styles.table}>
             <thead>
-              <tr style={{ borderBottom: '2px solid #e0e0e0', textAlign: 'left', background: '#fafafa' }}>
-                <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Name</th>
-                <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Field Path</th>
-                <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Type</th>
-                <th style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>Default</th>
+              <tr className={styles.headerRow} style={{ borderBottom: `2px solid ${theme.palette.divider}`, background: theme.palette.background.default }}>
+                <th className={styles.th}>Name</th>
+                <th className={styles.th}>Field Path</th>
+                <th className={styles.th}>Type</th>
+                <th className={styles.th}>Default</th>
               </tr>
             </thead>
             <tbody>
               {dimensions.map((d: any, i: number) => (
-                <tr key={i} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                  <td style={{ padding: '6px 10px', fontFamily: 'monospace', fontSize: 11, fontWeight: 600 }}>{d.name}</td>
-                  <td style={{ padding: '6px 10px', fontFamily: 'monospace', fontSize: 11, color: '#1565c0' }}>{d.fieldPath}</td>
-                  <td style={{ padding: '6px 10px', fontSize: 11 }}>{d.type ?? 'primitive'}</td>
-                  <td style={{ padding: '6px 10px', fontSize: 11, color: '#888' }}>{d.default != null ? JSON.stringify(d.default) : '—'}</td>
+                <tr key={i} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+                  <td className={`${styles.td} ${styles.mono}`} style={{ fontWeight: 600 }}>{d.name}</td>
+                  <td className={`${styles.td} ${styles.mono}`} style={{ color: '#1565c0' }}>{d.fieldPath}</td>
+                  <td className={styles.td}>{d.type ?? 'primitive'}</td>
+                  <td className={styles.td} style={{ color: theme.palette.text.secondary }}>{d.default != null ? JSON.stringify(d.default) : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -66,7 +68,7 @@ export function ManagedMetricDetail({ item }: { item: any }) {
       )}
 
       {tab === (dimensions.length > 0 ? 2 : 1) && <ConditionsTable conditions={item.status?.conditions ?? []} />}
-      {tab === (dimensions.length > 0 ? 3 : 2) && <Box style={{ height: 500 }}><YamlEditor item={item} onSave={async () => {}} readOnly /></Box>}
+      {tab === (dimensions.length > 0 ? 3 : 2) && <Box className={styles.yamlPane}><YamlEditor item={item} onSave={async () => {}} readOnly /></Box>}
     </Box>
   );
 }

@@ -4,8 +4,9 @@ import { getApiProxy, clusterPrefix } from '../../common/helpers';
 import type { MetricKind } from './KindSelector';
 import type { SelectedGVK } from './ResourcePicker';
 import type { MetricFormValues } from './MetricForm';
+import styles from './ReviewYaml.module.css';
 
-const { Box, Typography, Alert, CircularProgress, Button } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Alert, CircularProgress, Button, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 interface Props {
   kind: MetricKind;
@@ -108,6 +109,7 @@ function pluralFor(kind: MetricKind): string {
 }
 
 export function ReviewYaml({ kind, gvk, form, federatedAccessRef, onSuccess }: Props) {
+  const theme = useTheme();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const manifest = buildManifest(kind, gvk, form, federatedAccessRef);
@@ -132,24 +134,24 @@ export function ReviewYaml({ kind, gvk, form, federatedAccessRef, onSuccess }: P
 
   return (
     <Box>
-      <Typography variant="h6" style={{ marginBottom: 6 }}>Review &amp; Create</Typography>
-      <Typography variant="body2" color="textSecondary" style={{ marginBottom: 16 }}>
+      <Typography variant="h6" className={styles.title}>Review &amp; Create</Typography>
+      <Typography variant="body2" color="textSecondary" className={styles.subtitle}>
         Review the generated manifest. You can edit it directly before creating.
       </Typography>
 
-      {error && <Alert severity="error" style={{ marginBottom: 12 }}>{error}</Alert>}
+      {error && <Alert severity="error" className={styles.errorAlert}>{error}</Alert>}
 
-      <Box style={{ height: 400, border: '1px solid #e0e0e0', borderRadius: 6, overflow: 'hidden' }}>
+      <Box className={styles.editorWrap} style={{ border: `1px solid ${theme.palette.divider}` }}>
         <YamlEditor item={manifest} onSave={async () => {}} readOnly={false} initialStage="edit" />
       </Box>
 
-      <Box display="flex" justifyContent="flex-end" style={{ marginTop: 16, gap: 10 }}>
+      <Box display="flex" justifyContent="flex-end" className={styles.footer}>
         <Button
           variant="contained"
           color="primary"
           onClick={handleCreate}
           disabled={submitting || !form.name || !form.interval}>
-          {submitting ? <CircularProgress size={18} style={{ marginRight: 8 }} /> : null}
+          {submitting ? <CircularProgress size={18} className={styles.spinner} /> : null}
           Create {kind}
         </Button>
       </Box>

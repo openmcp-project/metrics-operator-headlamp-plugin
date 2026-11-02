@@ -5,8 +5,9 @@ import { SmartProposals } from './SmartProposals';
 import { MetricForm, MetricFormValues } from './MetricForm';
 import { ReviewYaml } from './ReviewYaml';
 import { ProposalConfig } from './proposals';
+import styles from './MetricWizard.module.css';
 
-const { Box, Typography, Stepper, Step, StepLabel, Button, Alert } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Stepper, Step, StepLabel, Button, Alert, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 const STEPS_WITH_TARGET = ['Select Kind', 'Target Resource', 'Proposals', 'Configure', 'Review'];
 const STEPS_NO_TARGET   = ['Select Kind', 'Configure', 'Review'];
@@ -41,6 +42,7 @@ interface MetricWizardProps {
 }
 
 export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
+  const theme = useTheme();
   const [kind, setKind] = useState<MetricKind>((initialKind as MetricKind) ?? 'Metric');
   const [gvk, setGvk] = useState<SelectedGVK | null>(null);
   const [federatedAccessRef, setFederatedAccessRef] = useState('');
@@ -92,8 +94,8 @@ export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
 
   if (success) {
     return (
-      <Box style={{ padding: 32 }}>
-        <Alert severity="success" style={{ marginBottom: 16 }}>
+      <Box className={styles.successBox}>
+        <Alert severity="success" className={styles.successAlert}>
           <strong>{success}</strong> created successfully!
         </Alert>
         <Button variant="contained" onClick={() => { setSuccess(null); setStep(0); setForm(defaultForm(kind)); setGvk(null); }}>
@@ -104,10 +106,10 @@ export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
   }
 
   return (
-    <Box style={{ padding: 24 }}>
-      <Typography variant="h5" style={{ marginBottom: 20, fontWeight: 700 }}>Create Metric</Typography>
+    <Box className={styles.root}>
+      <Typography variant="h5" className={styles.title}>Create Metric</Typography>
 
-      <Stepper activeStep={step} style={{ marginBottom: 28 }}>
+      <Stepper activeStep={step} className={styles.stepper}>
         {steps.map((label: string) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
@@ -115,7 +117,7 @@ export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
         ))}
       </Stepper>
 
-      <Box style={{ minHeight: 340 }}>
+      <Box className={styles.stepContent}>
         {/* Step 0: Kind */}
         {step === 0 && (
           <KindSelector value={kind} onChange={handleKindChange} />
@@ -160,7 +162,7 @@ export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
 
       {/* Navigation — hide on Proposals step (it has its own buttons) and Review */}
       {steps[step] !== 'Proposals' && steps[step] !== 'Review' && (
-        <Box display="flex" justifyContent="space-between" style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid #e0e0e0' }}>
+        <Box display="flex" justifyContent="space-between" className={styles.nav} style={{ borderTop: `1px solid ${theme.palette.divider}` }}>
           <Button onClick={back} disabled={step === 0} variant="outlined">Back</Button>
           <Button onClick={next} variant="contained" disabled={!canNext()}>
             {step === steps.length - 2 ? 'Review' : 'Next'}
@@ -169,7 +171,7 @@ export function MetricWizard({ initialKind }: MetricWizardProps = {}) {
       )}
 
       {steps[step] === 'Review' && (
-        <Box display="flex" style={{ marginTop: 12 }}>
+        <Box display="flex" className={styles.reviewNav}>
           <Button onClick={back} variant="outlined">Back</Button>
         </Box>
       )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { readyColor, phaseColor } from './colors';
 import { readyLabel } from './helpers';
+import styles from './StatusBadge.module.css';
 
 const { Chip } = (window as any).pluginLib?.MuiCore ?? {};
 
@@ -28,12 +29,10 @@ export function StatusBadge({ ready, phase, style }: StatusBadgeProps) {
     <Chip
       label={label}
       size="small"
+      className={styles.badge}
       style={{
         background: color.bg,
         color: color.text,
-        fontWeight: 600,
-        fontSize: 11,
-        height: 22,
         ...style,
       }}
     />

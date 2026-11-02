@@ -1,0 +1,74 @@
+.empty {
+  padding: 8px 0;
+  font-style: italic;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerRow {
+  text-align: left;
+}
+
+.th {
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.tdType {
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tdStatus {
+  padding: 8px 12px;
+}
+
+.tdText {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.tdMessage {
+  padding: 8px 12px;
+  font-size: 12px;
+  max-width: 320px;
+  word-break: break-word;
+}
+
+.tdTime {
+  padding: 8px 12px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.statusChip {
+  font-weight: 600;
+  font-size: 10px;
+  height: 20px;
+}
+
+.badge {
+  gap: 4px;
+}
+
+.badgeEmpty {
+  font-size: 12px;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badgeLabel {
+  font-size: 12px;
+}

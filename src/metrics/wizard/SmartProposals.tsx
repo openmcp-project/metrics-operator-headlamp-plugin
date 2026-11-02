@@ -1,8 +1,9 @@
 import React from 'react';
 import { getProposals, GENERIC_PROPOSALS, ProposalConfig } from './proposals';
 import type { SelectedGVK } from './ResourcePicker';
+import styles from './SmartProposals.module.css';
 
-const { Box, Typography, Button, Alert } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Typography, Button, Alert, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 
 interface Props {
   gvk: SelectedGVK;
@@ -11,49 +12,46 @@ interface Props {
 }
 
 function ProposalCard({ proposal, onSelect }: { proposal: ProposalConfig; onSelect: () => void }) {
+  const theme = useTheme();
   return (
     <Box
+      className={styles.card}
       style={{
-        border: '1px solid #e0e0e0',
-        borderRadius: 8,
-        padding: '12px 16px',
-        background: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 6,
+        border: `1px solid ${theme.palette.divider}`,
+        background: theme.palette.background.paper,
       }}>
-      <Typography variant="subtitle2" style={{ fontWeight: 700 }}>{proposal.title}</Typography>
-      <Typography variant="body2" color="textSecondary" style={{ fontSize: 12, flex: 1 }}>
+      <Typography variant="subtitle2" className={styles.cardTitle}>{proposal.title}</Typography>
+      <Typography variant="body2" color="textSecondary" className={styles.cardDescription}>
         {proposal.description}
       </Typography>
       {proposal.cardinalityWarning && (
-        <Alert severity="warning" style={{ fontSize: 11, padding: '4px 10px' }}>
+        <Alert severity="warning" className={styles.cardAlert}>
           {proposal.cardinalityWarning}
         </Alert>
       )}
       {proposal.suggestKindSwitch && (
-        <Alert severity="info" style={{ fontSize: 11, padding: '4px 10px' }}>
+        <Alert severity="info" className={styles.cardAlert}>
           Consider using a <strong>ManagedMetric</strong> instead — it auto-discovers Crossplane managed resources without needing a specific GVK.
         </Alert>
       )}
-      <Box display="flex" style={{ gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+      <Box display="flex" className={styles.pillRow}>
         {proposal.projections?.map(p => (
-          <Box key={p.name} style={{ background: '#f5f5f5', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
+          <Box key={p.name} className={styles.pill} style={{ background: theme.palette.background.default }}>
             dim: {p.name}
           </Box>
         ))}
         {proposal.valueFrom && (
-          <Box style={{ background: '#e8f5e9', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
+          <Box className={styles.pill} style={{ background: '#e8f5e9', color: '#1a1a1a' }}>
             valueFrom: {proposal.valueFrom.fieldPath}
           </Box>
         )}
         {proposal.interval && (
-          <Box style={{ background: '#e3f2fd', borderRadius: 4, padding: '2px 7px', fontSize: 10, fontFamily: 'monospace' }}>
+          <Box className={styles.pill} style={{ background: '#e3f2fd', color: '#1a1a1a' }}>
             interval: {proposal.interval}
           </Box>
         )}
       </Box>
-      <Button variant="contained" size="small" onClick={onSelect} style={{ marginTop: 8, alignSelf: 'flex-start' }}>
+      <Button variant="contained" size="small" onClick={onSelect} className={styles.useButton}>
         Use this proposal
       </Button>
     </Box>
@@ -61,30 +59,31 @@ function ProposalCard({ proposal, onSelect }: { proposal: ProposalConfig; onSele
 }
 
 export function SmartProposals({ gvk, onSelect, onSkip }: Props) {
+  const theme = useTheme();
   const specific = getProposals(gvk.group, gvk.version, gvk.kind);
   const proposals = specific.length > 0 ? specific : GENERIC_PROPOSALS;
   const isGeneric = specific.length === 0;
 
   return (
     <Box>
-      <Typography variant="h6" style={{ marginBottom: 6 }}>Smart Proposals</Typography>
-      <Typography variant="body2" color="textSecondary" style={{ marginBottom: 18 }}>
+      <Typography variant="h6" className={styles.title}>Smart Proposals</Typography>
+      <Typography variant="body2" color="textSecondary" className={styles.subtitle}>
         {isGeneric
           ? `No built-in proposals for ${gvk.kind}. Here are generic patterns that work with any resource.`
           : `Based on ${gvk.group ? `${gvk.group}/` : ''}${gvk.version}/${gvk.kind} — select a proposal to pre-fill the form.`}
       </Typography>
 
-      <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12, marginBottom: 20 }}>
+      <Box className={styles.grid}>
         {proposals.map(p => (
           <ProposalCard key={p.id} proposal={p} onSelect={() => onSelect(p)} />
         ))}
       </Box>
 
-      <Box style={{ borderTop: '1px solid #e0e0e0', paddingTop: 14 }}>
+      <Box className={styles.skipSection} style={{ borderTop: `1px solid ${theme.palette.divider}` }}>
         <Button variant="outlined" onClick={onSkip}>
           Custom / Start from scratch
         </Button>
-        <Typography variant="caption" color="textSecondary" style={{ display: 'block', marginTop: 6 }}>
+        <Typography variant="caption" color="textSecondary" className={styles.skipHint}>
           Skip proposals and configure all fields manually.
         </Typography>
       </Box>

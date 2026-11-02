@@ -1,0 +1,94 @@
+.title {
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  margin-bottom: 18px;
+}
+
+.fedAccessSection {
+  margin-bottom: 20px;
+}
+
+.fedAccessLabel {
+  margin-bottom: 8px;
+}
+
+.fedAccessControl {
+  min-width: 280px;
+}
+
+.filterBar {
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.search {
+  min-width: 220px;
+}
+
+.groupFilter {
+  min-width: 200px;
+}
+
+.loadingBox {
+  gap: 10px;
+  padding: 24px;
+}
+
+.tableWrap {
+  max-height: 380px;
+  overflow-y: auto;
+  border-radius: 6px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.th {
+  padding: 7px 12px;
+  font-weight: 600;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.td {
+  padding: 7px 12px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.row {
+  cursor: pointer;
+}
+
+.mono {
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.chip {
+  font-size: 10px;
+  height: 18px;
+}
+
+.emptyCell {
+  padding: 24px;
+  text-align: center;
+  font-style: italic;
+}
+
+.selectedSummary {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+}

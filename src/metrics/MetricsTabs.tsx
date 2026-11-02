@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MetricList from './MetricList';
 import ManagedMetricList from './ManagedMetricList';
 import FederatedMetricList from './FederatedMetricList';
-import { MetricWizard } from './wizard/MetricWizard';
 import { Metric, ManagedMetric, FederatedMetric, FederatedManagedMetric } from '../common/Resources';
+import styles from './MetricsTabs.module.css';
 
-const { Box, Tabs, Tab, Button } = (window as any).pluginLib?.MuiCore ?? {};
+const { Box, Tabs, Tab, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
 const { SectionBox } = (window as any).pluginLib?.CommonComponents ?? {};
 
-interface MetricsTabsProps {
-  onCreateMetric?: (kind: string) => void;
-}
-
-export default function MetricsTabs({ onCreateMetric }: MetricsTabsProps) {
+export default function MetricsTabs() {
+  const theme = useTheme();
   const [tab, setTab] = useState(0);
 
   const [metrics] = Metric.useList() as [any[], any];
@@ -34,34 +31,10 @@ export default function MetricsTabs({ onCreateMetric }: MetricsTabsProps) {
     `Federated Managed${counts[3] ? ` (${counts[3]})` : ''}`,
   ];
 
-  function openWizard(kind: string) {
-    const Activity = (window as any).pluginLib?.Activity;
-    if (!Activity) { onCreateMetric?.(kind); return; }
-    Activity.launch({
-      id: `metric-create:${kind}`,
-      location: 'split-right',
-      temporary: true,
-      title: `Create ${kind}`,
-      content: React.createElement(MetricWizard, { initialKind: kind }),
-    });
-  }
-
   return (
-    <SectionBox
-      title="Metrics"
-      headerProps={{
-        headerStyle: 'main',
-        actions: [
-          <Button key="create" variant="contained" size="small"
-            onClick={() => openWizard(tab === 0 ? 'Metric' : tab === 1 ? 'ManagedMetric' : tab === 2 ? 'FederatedMetric' : 'FederatedManagedMetric')}
-            style={{ background: '#1565c0' }}>
-            + Create Metric
-          </Button>,
-        ],
-      }}
-    >
-      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} style={{ marginBottom: 16, borderBottom: '1px solid #e0e0e0' }}>
-        {tabLabels.map((label, i) => <Tab key={i} label={label} style={{ fontSize: 13 }} />)}
+    <SectionBox title="Metrics" headerProps={{ headerStyle: 'main' }}>
+      <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} className={styles.tabs} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+        {tabLabels.map((label, i) => <Tab key={i} label={label} className={styles.tab} />)}
       </Tabs>
 
       {tab === 0 && <MetricList />}
