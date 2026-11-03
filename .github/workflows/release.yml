@@ -1,0 +1,100 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      nextVersion:
+        description: "Specify the release version in semver format v[major].[minor].[patch] e.g. v0.0.0"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Check if tag already exists
+        run: |
+          if git rev-parse ${{ github.event.inputs.nextVersion }} >/dev/null 2>&1; then
+            echo "Tag ${{ github.event.inputs.nextVersion }} already exists."
+            exit 1
+          else
+            echo "Tag does not exist. Building release version ${{ github.event.inputs.nextVersion }}"
+          fi
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Package plugin tar.gz for ArtifactHub
+        run: |
+          VERSION=${{ github.event.inputs.nextVersion }}
+          SEMVER=${VERSION#v}
+          mkdir -p package/headlamp-metrics-operator
+          cp dist/main.js package/headlamp-metrics-operator/main.js
+          cp package.json package/headlamp-metrics-operator/package.json
+          tar -czf headlamp-metrics-operator-${SEMVER}.tar.gz -C package headlamp-metrics-operator
+          echo "TARBALL=headlamp-metrics-operator-${SEMVER}.tar.gz" >> $GITHUB_ENV
+          echo "SEMVER=${SEMVER}" >> $GITHUB_ENV
+
+      - name: Write artifacthub-pkg.yml for this version
+        run: |
+          CHECKSUM=$(sha256sum ${{ env.TARBALL }} | awk '{print $1}')
+          SEMVER=${{ env.SEMVER }}
+          VERSION=${{ github.event.inputs.nextVersion }}
+          TEMPLATE="artifacthub/0.0.1/artifacthub-pkg.yml"
+          PKGFILE="artifacthub/${SEMVER}/artifacthub-pkg.yml"
+          mkdir -p "artifacthub/${SEMVER}"
+          cp "$TEMPLATE" "$PKGFILE"
+          [ -f "artifacthub/0.0.1/README.md" ] && cp "artifacthub/0.0.1/README.md" "artifacthub/${SEMVER}/README.md"
+          sed -i "s|version: .*|version: ${SEMVER}|" "$PKGFILE"
+          sed -i "s|https://github.com/openmcp-project/[^/]*/releases/download/[^/]*/[^ ]*\.tar\.gz|https://github.com/openmcp-project/metrics-operator-headlamp-plugin/releases/download/${VERSION}/headlamp-metrics-operator-${SEMVER}.tar.gz|g" "$PKGFILE"
+          sed -i "s|sha256:.*|sha256:${CHECKSUM}|" "$PKGFILE"
+          echo "PKGFILE=${PKGFILE}" >> $GITHUB_ENV
+
+      - name: Tag and create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag ${{ github.event.inputs.nextVersion }}
+          git push origin ${{ github.event.inputs.nextVersion }}
+          gh release create ${{ github.event.inputs.nextVersion }} \
+            --generate-notes \
+            --target ${{ github.sha }} \
+            dist/main.js \
+            ${{ env.TARBALL }}
+
+      - name: Open PR with artifacthub metadata
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=${{ github.event.inputs.nextVersion }}
+          BRANCH="chore/artifacthub-${VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${BRANCH}"
+          git add artifacthub/
+          git diff --staged --quiet || git commit -m "chore: add artifacthub metadata for ${VERSION}"
+          git push --force origin "${BRANCH}"
+          gh pr create \
+            --title "chore: add artifacthub metadata for ${VERSION}" \
+            --body "Automated PR created by the release workflow for ${VERSION}. Merge to complete the ArtifactHub publish." \
+            --base main \
+            --head "${BRANCH}" || true
