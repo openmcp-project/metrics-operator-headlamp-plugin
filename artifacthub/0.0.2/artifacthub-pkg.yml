@@ -1,0 +1,15 @@
+version: 0.0.2
+name: headlamp_metrics_operator
+displayName: Metrics Operator
+createdAt: "2026-11-02T00:00:00Z"
+description: Adds a Metrics Operator section to the sidebar with views for Metrics, Data Sinks, and Cluster Access resources.
+logoURL: "https://avatars.githubusercontent.com/u/45158470?s=200&v=4"
+changes:
+  - kind: added
+    description: "Initial release"
+annotations:
+  headlamp/plugin/archive-url: >-
+    https://github.com/openmcp-project/metrics-operator-headlamp-plugin/releases/download/v0.0.2/headlamp-metrics-operator-0.0.2.tar.gz
+  headlamp/plugin/archive-checksum: sha256:9351f0b6b4deedbbec72d94e3838699fd9530dbc83501c979788012fcdbf538a
+  headlamp/plugin/version-compat: ">=0.22"
+  headlamp/plugin/distro-compat: in-cluster,web
