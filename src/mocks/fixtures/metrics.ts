@@ -1,12 +1,14 @@
 // Hand-crafted Metric and ManagedMetric fixture instances
 
+import { METRICS_API_VERSION } from '../../common/apiGroup';
+
 export const metricsFixtures = {
   kind: 'MetricList',
-  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+  apiVersion: METRICS_API_VERSION,
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'Metric',
       metadata: {
         name: 'pod-count',
@@ -29,7 +31,7 @@ export const metricsFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'Metric',
       metadata: {
         name: 'pvc-bound-count',
@@ -52,7 +54,7 @@ export const metricsFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'Metric',
       metadata: {
         name: 'deployment-available',
@@ -82,11 +84,11 @@ export const metricsFixtures = {
 
 export const managedMetricsFixtures = {
   kind: 'ManagedMetricList',
-  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+  apiVersion: METRICS_API_VERSION,
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'ManagedMetric',
       metadata: {
         name: 'helm-releases',
@@ -108,7 +110,7 @@ export const managedMetricsFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'ManagedMetric',
       metadata: {
         name: 's3-buckets',

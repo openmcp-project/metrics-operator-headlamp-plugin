@@ -4,6 +4,7 @@ import { GVKChip } from '../common/GVKChip';
 import { ConditionsTable } from '../common/ConditionsTable';
 import { YamlEditor } from '../common/YamlEditor';
 import { moColors } from '../common/colors';
+import { METRICS_API_VERSION } from '../common/apiGroup';
 import styles from './FederatedMetricDetail.module.css';
 
 const { Box, Typography, Tabs, Tab, Chip, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
@@ -25,7 +26,7 @@ export function FederatedMetricDetail({ item, kind }: Props) {
     <Box style={{ padding: 20, minWidth: 480 }}>
       <Typography variant="h6" style={{ marginBottom: 4 }}>{item.metadata?.name}</Typography>
       <Typography variant="caption" color="textSecondary" style={{ display: 'block', marginBottom: 16 }}>
-        {item.metadata?.namespace} · metrics.open-control-plane.io/v1alpha1 · {kind}
+        {item.metadata?.namespace} · {METRICS_API_VERSION} · {kind}
       </Typography>
 
       {isFedManaged && (

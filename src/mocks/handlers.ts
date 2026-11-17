@@ -3,12 +3,13 @@ import { metricsFixtures, managedMetricsFixtures } from './fixtures/metrics';
 import { federatedMetricsFixtures, federatedManagedMetricsFixtures } from './fixtures/federatedMetrics';
 import { dataSinksFixtures } from './fixtures/datasinks';
 import { clusterAccessFixtures } from './fixtures/clusterAccess';
+import { METRICS_GROUP, METRICS_VERSION } from '../common/apiGroup';
 
 const BASE = 'http://localhost:4466';
 const json = (data: any) => HttpResponse.json(data);
 
-const GROUP = 'metrics.open-control-plane.io';
-const VERSION = 'v1alpha1';
+const GROUP = METRICS_GROUP;
+const VERSION = METRICS_VERSION;
 
 export const handlers = [
   // ── Metrics ─────────────────────────────────────────────────────────────────

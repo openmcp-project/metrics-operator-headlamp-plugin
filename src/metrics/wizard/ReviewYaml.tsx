@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { YamlEditor } from '../../common/YamlEditor';
 import { getApiProxy, clusterPrefix } from '../../common/helpers';
+import { METRICS_GROUP, METRICS_VERSION, METRICS_API_VERSION } from '../../common/apiGroup';
 import type { MetricKind } from './KindSelector';
 import type { SelectedGVK } from './ResourcePicker';
 import type { MetricFormValues } from './MetricForm';
@@ -18,7 +19,7 @@ interface Props {
 
 function buildManifest(kind: MetricKind, gvk: SelectedGVK | null, form: MetricFormValues, federatedAccessRef?: string): any {
   const base = {
-    apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+    apiVersion: METRICS_API_VERSION,
     kind,
     metadata: {
       name: form.name,
@@ -122,7 +123,7 @@ export function ReviewYaml({ kind, gvk, form, federatedAccessRef, onSuccess }: P
     try {
       const plural = pluralFor(kind);
       const ns = form.namespace || 'default';
-      const url = `${clusterPrefix()}/apis/metrics.open-control-plane.io/v1alpha1/namespaces/${ns}/${plural}`;
+      const url = `${clusterPrefix()}/apis/${METRICS_GROUP}/${METRICS_VERSION}/namespaces/${ns}/${plural}`;
       await proxy.request(url, { method: 'POST', data: JSON.stringify(manifest) });
       onSuccess(form.name);
     } catch (e: any) {

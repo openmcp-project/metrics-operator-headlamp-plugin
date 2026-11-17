@@ -1,12 +1,14 @@
 // Hand-crafted DataSink fixture instances
 
+import { METRICS_API_VERSION } from '../../common/apiGroup';
+
 export const dataSinksFixtures = {
   kind: 'DataSinkList',
-  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+  apiVersion: METRICS_API_VERSION,
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'DataSink',
       metadata: {
         name: 'default',
@@ -27,7 +29,7 @@ export const dataSinksFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'DataSink',
       metadata: {
         name: 'dynatrace',
@@ -48,7 +50,7 @@ export const dataSinksFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'DataSink',
       metadata: {
         name: 'grpc-sink',
