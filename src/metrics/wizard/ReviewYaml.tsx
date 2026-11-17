@@ -18,7 +18,7 @@ interface Props {
 
 function buildManifest(kind: MetricKind, gvk: SelectedGVK | null, form: MetricFormValues, federatedAccessRef?: string): any {
   const base = {
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: 'metrics.open-control-plane.io/v1alpha1',
     kind,
     metadata: {
       name: form.name,
@@ -122,7 +122,7 @@ export function ReviewYaml({ kind, gvk, form, federatedAccessRef, onSuccess }: P
     try {
       const plural = pluralFor(kind);
       const ns = form.namespace || 'default';
-      const url = `${clusterPrefix()}/apis/metrics.openmcp.cloud/v1alpha1/namespaces/${ns}/${plural}`;
+      const url = `${clusterPrefix()}/apis/metrics.open-control-plane.io/v1alpha1/namespaces/${ns}/${plural}`;
       await proxy.request(url, { method: 'POST', data: JSON.stringify(manifest) });
       onSuccess(form.name);
     } catch (e: any) {

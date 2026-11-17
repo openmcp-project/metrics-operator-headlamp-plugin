@@ -5,7 +5,7 @@ const makeKubeObject: (name: string) => any =
   (K8s as any).makeKubeObject ??
   (() => Object.getPrototypeOf(K8s.ResourceClasses.CustomResourceDefinition));
 
-const GROUP = 'metrics.openmcp.cloud';
+const GROUP = 'metrics.open-control-plane.io';
 const VERSION = 'v1alpha1';
 
 // ── Metric ────────────────────────────────────────────────────────────────────

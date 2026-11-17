@@ -18,7 +18,7 @@ export function ManagedMetricDetail({ item }: { item: any }) {
     <Box style={{ padding: 20, minWidth: 480 }}>
       <Typography variant="h6" style={{ marginBottom: 4 }}>{item.metadata?.name}</Typography>
       <Typography variant="caption" color="textSecondary" style={{ display: 'block', marginBottom: 16 }}>
-        {item.metadata?.namespace} · metrics.openmcp.cloud/v1alpha1 · ManagedMetric
+        {item.metadata?.namespace} · metrics.open-control-plane.io/v1alpha1 · ManagedMetric
       </Typography>
 
       <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} className={styles.tabs} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>

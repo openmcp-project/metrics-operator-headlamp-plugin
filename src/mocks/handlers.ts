@@ -7,7 +7,7 @@ import { clusterAccessFixtures } from './fixtures/clusterAccess';
 const BASE = 'http://localhost:4466';
 const json = (data: any) => HttpResponse.json(data);
 
-const GROUP = 'metrics.openmcp.cloud';
+const GROUP = 'metrics.open-control-plane.io';
 const VERSION = 'v1alpha1';
 
 export const handlers = [

@@ -2,11 +2,11 @@
 
 export const dataSinksFixtures = {
   kind: 'DataSinkList',
-  apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'DataSink',
       metadata: {
         name: 'default',
@@ -27,7 +27,7 @@ export const dataSinksFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'DataSink',
       metadata: {
         name: 'dynatrace',
@@ -48,7 +48,7 @@ export const dataSinksFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'DataSink',
       metadata: {
         name: 'grpc-sink',

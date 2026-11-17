@@ -3,11 +3,11 @@
 export const clusterAccessFixtures = {
   remoteClusterAccesses: {
     kind: 'RemoteClusterAccessList',
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: 'metrics.open-control-plane.io/v1alpha1',
     metadata: {},
     items: [
       {
-        apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+        apiVersion: 'metrics.open-control-plane.io/v1alpha1',
         kind: 'RemoteClusterAccess',
         metadata: {
           name: 'production-cluster',
@@ -25,7 +25,7 @@ export const clusterAccessFixtures = {
         status: {},
       },
       {
-        apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+        apiVersion: 'metrics.open-control-plane.io/v1alpha1',
         kind: 'RemoteClusterAccess',
         metadata: {
           name: 'staging-cluster',
@@ -46,11 +46,11 @@ export const clusterAccessFixtures = {
   },
   federatedClusterAccesses: {
     kind: 'FederatedClusterAccessList',
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: 'metrics.open-control-plane.io/v1alpha1',
     metadata: {},
     items: [
       {
-        apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+        apiVersion: 'metrics.open-control-plane.io/v1alpha1',
         kind: 'FederatedClusterAccess',
         metadata: {
           name: 'federated-access',

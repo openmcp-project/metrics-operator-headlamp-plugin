@@ -7,7 +7,7 @@ import styles from './DataSinkForm.module.css';
 const { Box, Typography, Button, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel, Alert, Divider, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
 
-const GROUP = 'metrics.openmcp.cloud';
+const GROUP = 'metrics.open-control-plane.io';
 const VERSION = 'v1alpha1';
 
 interface DataSinkFormProps {

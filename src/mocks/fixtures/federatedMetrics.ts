@@ -2,11 +2,11 @@
 
 export const federatedMetricsFixtures = {
   kind: 'FederatedMetricList',
-  apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'FederatedMetric',
       metadata: {
         name: 'xplane-providers',
@@ -35,11 +35,11 @@ export const federatedMetricsFixtures = {
 
 export const federatedManagedMetricsFixtures = {
   kind: 'FederatedManagedMetricList',
-  apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'FederatedManagedMetric',
       metadata: {
         name: 'all-managed-resources',

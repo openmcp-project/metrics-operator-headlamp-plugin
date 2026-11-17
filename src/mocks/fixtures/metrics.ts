@@ -2,11 +2,11 @@
 
 export const metricsFixtures = {
   kind: 'MetricList',
-  apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'Metric',
       metadata: {
         name: 'pod-count',
@@ -29,7 +29,7 @@ export const metricsFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'Metric',
       metadata: {
         name: 'pvc-bound-count',
@@ -52,7 +52,7 @@ export const metricsFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'Metric',
       metadata: {
         name: 'deployment-available',
@@ -82,11 +82,11 @@ export const metricsFixtures = {
 
 export const managedMetricsFixtures = {
   kind: 'ManagedMetricList',
-  apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+  apiVersion: 'metrics.open-control-plane.io/v1alpha1',
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'ManagedMetric',
       metadata: {
         name: 'helm-releases',
@@ -108,7 +108,7 @@ export const managedMetricsFixtures = {
       },
     },
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: 'metrics.open-control-plane.io/v1alpha1',
       kind: 'ManagedMetric',
       metadata: {
         name: 's3-buckets',

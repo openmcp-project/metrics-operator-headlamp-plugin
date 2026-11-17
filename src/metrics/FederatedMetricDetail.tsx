@@ -25,7 +25,7 @@ export function FederatedMetricDetail({ item, kind }: Props) {
     <Box style={{ padding: 20, minWidth: 480 }}>
       <Typography variant="h6" style={{ marginBottom: 4 }}>{item.metadata?.name}</Typography>
       <Typography variant="caption" color="textSecondary" style={{ display: 'block', marginBottom: 16 }}>
-        {item.metadata?.namespace} · metrics.openmcp.cloud/v1alpha1 · {kind}
+        {item.metadata?.namespace} · metrics.open-control-plane.io/v1alpha1 · {kind}
       </Typography>
 
       {isFedManaged && (
