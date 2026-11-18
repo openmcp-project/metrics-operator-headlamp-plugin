@@ -1,5 +1,7 @@
 // Mock data generators for metrics-operator plugin
 
+import { METRICS_API_VERSION } from '../common/apiGroup';
+
 export type HealthState = 'ready' | 'failed' | 'unknown';
 
 export function makeConditions(state: HealthState) {
@@ -29,7 +31,7 @@ export interface MetricSpec {
 export function makeMetric(spec: MetricSpec): any {
   const { name, namespace = 'default', group = '', version = 'v1', kind = 'Pod', interval = '1m', dataSink = 'default', health = 'ready', value } = spec;
   return {
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: METRICS_API_VERSION,
     kind: 'Metric',
     metadata: { name, namespace, uid: `uid-${name}`, creationTimestamp: '2024-03-01T10:00:00Z' },
     spec: {
@@ -54,7 +56,7 @@ export function makeManagedMetric(spec: {
 }): any {
   const { name, namespace = 'default', group, version = 'v1beta1', kind, interval = '1m', dataSink = 'default', health = 'ready', count } = spec;
   return {
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: METRICS_API_VERSION,
     kind: 'ManagedMetric',
     metadata: { name, namespace, uid: `uid-mm-${name}`, creationTimestamp: '2024-03-01T10:00:00Z' },
     spec: { target: { group, version, kind }, interval, dataSinkRef: { name: dataSink } },
@@ -75,7 +77,7 @@ export function makeFederatedMetric(spec: {
 }): any {
   const { name, namespace = 'default', group, version = 'v1', kind, dataSink = 'default', health = 'ready', active = 10, failed = 0, pending = 0 } = spec;
   return {
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: METRICS_API_VERSION,
     kind: 'FederatedMetric',
     metadata: { name, namespace, uid: `uid-fm-${name}`, creationTimestamp: '2024-03-01T10:00:00Z' },
     spec: {
@@ -117,7 +119,7 @@ export function smallLandscape() {
       makeFederatedMetric({ name: 'xplane-providers', group: 'pkg.crossplane.io', kind: 'Provider', active: 10, failed: 1 }),
     ],
     federatedManagedMetrics: [
-      { apiVersion: 'metrics.openmcp.cloud/v1alpha1', kind: 'FederatedManagedMetric', metadata: { name: 'all-managed', namespace: 'default', uid: 'uid-fmm-all', creationTimestamp: '2024-03-01T10:00:00Z' }, spec: { interval: '5m', federatedClusterAccessRef: { name: 'federated-access', namespace: 'default' }, dataSinkRef: { name: 'default' } }, status: { ready: 'True', observation: { activeCount: 87, failedCount: 5, pendingCount: 3 }, lastReconcileTime: '2024-03-10T12:00:00Z', conditions: makeConditions('ready') } },
+      { apiVersion: METRICS_API_VERSION, kind: 'FederatedManagedMetric', metadata: { name: 'all-managed', namespace: 'default', uid: 'uid-fmm-all', creationTimestamp: '2024-03-01T10:00:00Z' }, spec: { interval: '5m', federatedClusterAccessRef: { name: 'federated-access', namespace: 'default' }, dataSinkRef: { name: 'default' } }, status: { ready: 'True', observation: { activeCount: 87, failedCount: 5, pendingCount: 3 }, lastReconcileTime: '2024-03-10T12:00:00Z', conditions: makeConditions('ready') } },
     ],
   };
 }

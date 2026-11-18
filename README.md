@@ -7,7 +7,7 @@ A [Headlamp](https://headlamp.dev) plugin for the [service-provider-metrics-oper
 - **Health dashboard** — cross-kind overview of all metrics with status, values, conditions, and grouping/filtering
 - **Metrics** — list, inspect, and create all four metric kinds (Metric, ManagedMetric, FederatedMetric, FederatedManagedMetric) via a guided wizard
 - **Data Sinks** — view and create DataSink resources (HTTPS/gRPC, API key/mTLS auth)
-- **CRDs** — browse all `*.openmcp.cloud` CRDs with schema viewer and inline resource creation
+- **CRDs** — browse all `*.open-control-plane.io` CRDs with schema viewer and inline resource creation
 - **Cluster Access** — read-only view of RemoteClusterAccess and FederatedClusterAccess resources
 
 ## Prerequisites
@@ -127,7 +127,7 @@ src/
     DataSinkList.tsx
     DataSinkForm.tsx
   crds/
-    CRDView.tsx                  # CRD browser for *.openmcp.cloud groups
+    CRDView.tsx                  # CRD browser for *.open-control-plane.io groups
   access/
     ClusterAccessTabs.tsx        # RemoteClusterAccess + FederatedClusterAccess
   mocks/
@@ -143,7 +143,7 @@ mock-cluster/
 
 ## API group
 
-All operator CRDs live under `metrics.openmcp.cloud/v1alpha1`.
+All operator CRDs live under `metrics.open-control-plane.io/v1alpha1`.
 
 | Kind | Scope | Description |
 |---|---|---|

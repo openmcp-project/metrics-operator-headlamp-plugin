@@ -3,6 +3,7 @@ import { StatusBadge } from '../common/StatusBadge';
 import { GVKChip } from '../common/GVKChip';
 import { ConditionsTable } from '../common/ConditionsTable';
 import { YamlEditor } from '../common/YamlEditor';
+import { METRICS_API_VERSION } from '../common/apiGroup';
 import styles from './MetricDetail.module.css';
 
 const { Box, Typography, Tabs, Tab, Chip, Divider, useTheme } = (window as any).pluginLib?.MuiCore ?? {};
@@ -20,7 +21,7 @@ export function MetricDetail({ item }: { item: any }) {
     <Box style={{ padding: 20, minWidth: 480 }}>
       <Typography variant="h6" style={{ marginBottom: 4 }}>{item.metadata?.name}</Typography>
       <Typography variant="caption" color="textSecondary" style={{ display: 'block', marginBottom: 16 }}>
-        {item.metadata?.namespace} · metrics.openmcp.cloud/v1alpha1 · Metric
+        {item.metadata?.namespace} · {METRICS_API_VERSION} · Metric
       </Typography>
 
       <Tabs value={tab} onChange={(_: any, v: number) => setTab(v)} className={styles.tabs} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>

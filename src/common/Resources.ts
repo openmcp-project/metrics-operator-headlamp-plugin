@@ -1,17 +1,16 @@
 import { K8s } from '@kinvolk/headlamp-plugin/lib';
+import { METRICS_API_VERSION, METRICS_SERVICES_API_VERSION } from './apiGroup';
 
 // makeKubeObject was removed from K8s in Headlamp v0.39+.
 const makeKubeObject: (name: string) => any =
   (K8s as any).makeKubeObject ??
   (() => Object.getPrototypeOf(K8s.ResourceClasses.CustomResourceDefinition));
 
-const GROUP = 'metrics.openmcp.cloud';
-const VERSION = 'v1alpha1';
 
 // ── Metric ────────────────────────────────────────────────────────────────────
 
 export class Metric extends makeKubeObject('Metric') {
-  static apiVersion = `${GROUP}/${VERSION}`;
+  static apiVersion = METRICS_API_VERSION;
   static kind = 'Metric';
   static apiName = 'metrics';
   static isNamespaced = true;
@@ -33,7 +32,7 @@ export class Metric extends makeKubeObject('Metric') {
 // ── ManagedMetric ─────────────────────────────────────────────────────────────
 
 export class ManagedMetric extends makeKubeObject('ManagedMetric') {
-  static apiVersion = `${GROUP}/${VERSION}`;
+  static apiVersion = METRICS_API_VERSION;
   static kind = 'ManagedMetric';
   static apiName = 'managedmetrics';
   static isNamespaced = true;
@@ -55,7 +54,7 @@ export class ManagedMetric extends makeKubeObject('ManagedMetric') {
 // ── FederatedMetric ───────────────────────────────────────────────────────────
 
 export class FederatedMetric extends makeKubeObject('FederatedMetric') {
-  static apiVersion = `${GROUP}/${VERSION}`;
+  static apiVersion = METRICS_API_VERSION;
   static kind = 'FederatedMetric';
   static apiName = 'federatedmetrics';
   static isNamespaced = true;
@@ -80,7 +79,7 @@ export class FederatedMetric extends makeKubeObject('FederatedMetric') {
 // ── FederatedManagedMetric ────────────────────────────────────────────────────
 
 export class FederatedManagedMetric extends makeKubeObject('FederatedManagedMetric') {
-  static apiVersion = `${GROUP}/${VERSION}`;
+  static apiVersion = METRICS_API_VERSION;
   static kind = 'FederatedManagedMetric';
   static apiName = 'federatedmanagedmetrics';
   static isNamespaced = true;
@@ -102,7 +101,7 @@ export class FederatedManagedMetric extends makeKubeObject('FederatedManagedMetr
 // ── DataSink ──────────────────────────────────────────────────────────────────
 
 export class DataSink extends makeKubeObject('DataSink') {
-  static apiVersion = `${GROUP}/${VERSION}`;
+  static apiVersion = METRICS_API_VERSION;
   static kind = 'DataSink';
   static apiName = 'datasinks';
   static isNamespaced = true;
@@ -132,7 +131,7 @@ export class DataSink extends makeKubeObject('DataSink') {
 // ── RemoteClusterAccess ───────────────────────────────────────────────────────
 
 export class RemoteClusterAccess extends makeKubeObject('RemoteClusterAccess') {
-  static apiVersion = `${GROUP}/${VERSION}`;
+  static apiVersion = METRICS_API_VERSION;
   static kind = 'RemoteClusterAccess';
   static apiName = 'remoteclusteraccesses';
   static isNamespaced = true;
@@ -149,7 +148,7 @@ export class RemoteClusterAccess extends makeKubeObject('RemoteClusterAccess') {
 // ── FederatedClusterAccess ────────────────────────────────────────────────────
 
 export class FederatedClusterAccess extends makeKubeObject('FederatedClusterAccess') {
-  static apiVersion = `${GROUP}/${VERSION}`;
+  static apiVersion = METRICS_API_VERSION;
   static kind = 'FederatedClusterAccess';
   static apiName = 'federatedclusteraccesses';
   static isNamespaced = true;
@@ -167,7 +166,7 @@ export class FederatedClusterAccess extends makeKubeObject('FederatedClusterAcce
 // ── MetricsOperator (service-provider) ───────────────────────────────────────
 
 export class MetricsOperator extends makeKubeObject('MetricsOperator') {
-  static apiVersion = 'metrics.services.open-control-plane.io/v1alpha1';
+  static apiVersion = METRICS_SERVICES_API_VERSION;
   static kind = 'MetricsOperator';
   static apiName = 'metricsoperators';
   static isNamespaced = true;
@@ -183,7 +182,7 @@ export class MetricsOperator extends makeKubeObject('MetricsOperator') {
 // ── ProviderConfig (service-provider, cluster-scoped) ─────────────────────────
 
 export class ProviderConfig extends makeKubeObject('ProviderConfig') {
-  static apiVersion = 'metrics.services.open-control-plane.io/v1alpha1';
+  static apiVersion = METRICS_SERVICES_API_VERSION;
   static kind = 'ProviderConfig';
   static apiName = 'providerconfigs';
   static isNamespaced = false;

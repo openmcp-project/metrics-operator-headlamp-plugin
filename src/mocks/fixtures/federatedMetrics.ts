@@ -1,12 +1,14 @@
 // Hand-crafted FederatedMetric and FederatedManagedMetric fixture instances
 
+import { METRICS_API_VERSION } from '../../common/apiGroup';
+
 export const federatedMetricsFixtures = {
   kind: 'FederatedMetricList',
-  apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+  apiVersion: METRICS_API_VERSION,
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'FederatedMetric',
       metadata: {
         name: 'xplane-providers',
@@ -35,11 +37,11 @@ export const federatedMetricsFixtures = {
 
 export const federatedManagedMetricsFixtures = {
   kind: 'FederatedManagedMetricList',
-  apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+  apiVersion: METRICS_API_VERSION,
   metadata: {},
   items: [
     {
-      apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+      apiVersion: METRICS_API_VERSION,
       kind: 'FederatedManagedMetric',
       metadata: {
         name: 'all-managed-resources',

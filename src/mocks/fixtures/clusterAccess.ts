@@ -1,13 +1,15 @@
 // Hand-crafted RemoteClusterAccess and FederatedClusterAccess fixture instances
 
+import { METRICS_API_VERSION } from '../../common/apiGroup';
+
 export const clusterAccessFixtures = {
   remoteClusterAccesses: {
     kind: 'RemoteClusterAccessList',
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: METRICS_API_VERSION,
     metadata: {},
     items: [
       {
-        apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+        apiVersion: METRICS_API_VERSION,
         kind: 'RemoteClusterAccess',
         metadata: {
           name: 'production-cluster',
@@ -25,7 +27,7 @@ export const clusterAccessFixtures = {
         status: {},
       },
       {
-        apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+        apiVersion: METRICS_API_VERSION,
         kind: 'RemoteClusterAccess',
         metadata: {
           name: 'staging-cluster',
@@ -46,11 +48,11 @@ export const clusterAccessFixtures = {
   },
   federatedClusterAccesses: {
     kind: 'FederatedClusterAccessList',
-    apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+    apiVersion: METRICS_API_VERSION,
     metadata: {},
     items: [
       {
-        apiVersion: 'metrics.openmcp.cloud/v1alpha1',
+        apiVersion: METRICS_API_VERSION,
         kind: 'FederatedClusterAccess',
         metadata: {
           name: 'federated-access',

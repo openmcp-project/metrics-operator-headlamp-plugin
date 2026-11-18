@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { getApiProxy } from '../common/helpers';
+import { METRICS_GROUP, METRICS_VERSION, METRICS_API_VERSION } from '../common/apiGroup';
 import * as jsYaml from 'js-yaml';
 import { YamlEditor } from '../common/YamlEditor';
 import styles from './DataSinkForm.module.css';
 
 const { Box, Typography, Button, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel, Alert, Divider, useTheme } =
   (window as any).pluginLib?.MuiCore ?? {};
-
-const GROUP = 'metrics.openmcp.cloud';
-const VERSION = 'v1alpha1';
 
 interface DataSinkFormProps {
   onClose: () => void;
@@ -37,7 +35,7 @@ function buildYaml(values: any): string {
   }
 
   return jsYaml.dump({
-    apiVersion: `${GROUP}/${VERSION}`,
+    apiVersion: METRICS_API_VERSION,
     kind: 'DataSink',
     metadata: { name: values.name, namespace: values.namespace },
     spec,
@@ -77,7 +75,7 @@ export function DataSinkForm({ onClose, onCreated }: DataSinkFormProps) {
   async function handleCreate(obj: any) {
     const ns = obj.metadata?.namespace ?? namespace;
     await getApiProxy().request(
-      `/apis/${GROUP}/${VERSION}/namespaces/${ns}/datasinks`,
+      `/apis/${METRICS_GROUP}/${METRICS_VERSION}/namespaces/${ns}/datasinks`,
       { method: 'POST', isJSON: true, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) }
     );
     onCreated();
